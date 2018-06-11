@@ -117,7 +117,7 @@ public class DetailFragment extends Fragment {
 
 
         //musicLibrary.setRadioTitle(radioTitle);
-        musicLibrary = new MusicLibrary("Djoga_"+radioID, radioName, "Samtakie", "Online Radio Samtakie", "Radio", 100, TimeUnit.SECONDS,
+        musicLibrary = new MusicLibrary("Djoga_"+radioID, radioName, "Brought to you by Samtakie", "Online Radio Samtakie", "Radio", 100, TimeUnit.SECONDS,
                 radioLink, R.drawable.album_jazz_blues, radioImage);
 
 

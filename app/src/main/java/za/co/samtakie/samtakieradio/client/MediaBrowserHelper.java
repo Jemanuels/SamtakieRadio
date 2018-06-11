@@ -57,7 +57,7 @@ public class MediaBrowserHelper {
                             mMediaBrowserConnectionCallback,
                             null);
             mMediaBrowser.connect();
-            //mMediaController.getTransportControls().play();
+
         }
         Log.d(TAG, "onStart: Creating MediaBrowser, and connecting");
     }
