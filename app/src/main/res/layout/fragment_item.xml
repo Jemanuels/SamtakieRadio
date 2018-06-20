@@ -14,19 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"
-            android:src="@drawable/main_background"
             android:adjustViewBounds="true"
             android:id="@+id/radioImage" />
-
-        <!--<TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/radioName"
-            android:padding="8dp"
-            android:layout_alignBottom="@id/radioImage"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark"
-            android:text="Radio Koyeba"
-            android:textStyle="bold" />-->
 
         <TextView
             android:layout_width="wrap_content"

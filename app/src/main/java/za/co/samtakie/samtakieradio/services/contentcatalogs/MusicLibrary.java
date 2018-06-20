@@ -16,7 +16,6 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import za.co.samtakie.samtakieradio.BuildConfig;
-import za.co.samtakie.samtakieradio.R;
 
 public class MusicLibrary {
 
@@ -59,34 +58,6 @@ public class MusicLibrary {
 
 
     }
-    //SharedPreferences sharedPref = MusicLibrary.this.getSharedPreferences();
-
-    /*static {
-
-        createMediaMetadataCompat(
-                "Jazz_In_Paris",
-                MusicLibrary.radioTitle,
-                "Media Right Productions",
-                "Jazz & Blues",
-                "Jazz",
-                103,
-                TimeUnit.SECONDS,
-                "jazz_in_paris.mp3",
-                R.drawable.album_jazz_blues,
-                "album_jazz_blues");
-        createMediaMetadataCompat(
-                "The_Coldest_Shoulder",
-                "The Coldest Shoulder",
-                "The 126ers",
-                "Youtube Audio Library Rock 2",
-                "Rock",
-                160,
-                TimeUnit.SECONDS,
-                "the_coldest_shoulder.mp3",
-                R.drawable.album_youtube_audio_library_rock_2,
-                "album_youtube_audio_library_rock_2");
-    }*/
-
     public static SharedPreferences getSharedPreferences (Context ctxt) {
         return ctxt.getSharedPreferences("Djoga500", 0);
     }
@@ -98,7 +69,6 @@ public class MusicLibrary {
 
     public void setRadioTitle(String radioName) {
         MusicLibrary.radioTitle = radioName;
-        Log.d("MusicLibrary", "The title is " + MusicLibrary.radioTitle);
     }
 
 
@@ -164,7 +134,6 @@ public class MusicLibrary {
 
 
     public void createMediaMetadataCompat() {
-        Log.d("MusicLibrary", "The title is " + albumArtResName);
         if(music != null){
             music.clear();
         }
@@ -188,6 +157,4 @@ public class MusicLibrary {
         albumRes.put(mediaId, albumArtResId);
         musicFileName.put(mediaId, musicLinkname);
     }
-
-
 }

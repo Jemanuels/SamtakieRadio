@@ -5,7 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import java.net.URL;
 
-import za.co.samtakie.samtakieradio.data.Contract;
+import za.co.samtakie.samtakieradio.provider.Contract;
 import za.co.samtakie.samtakieradio.utilities.NetworkUtils;
 import za.co.samtakie.samtakieradio.utilities.OpenRadioJsonUtils;
 

@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,17 +30,17 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import za.co.samtakie.samtakieradio.MediaSeekBar;
+import za.co.samtakie.samtakieradio.IOnFocusListenable;
 import za.co.samtakie.samtakieradio.R;
 import za.co.samtakie.samtakieradio.client.MediaBrowserHelper;
-import za.co.samtakie.samtakieradio.data.Contract;
+import za.co.samtakie.samtakieradio.provider.Contract;
 import za.co.samtakie.samtakieradio.services.MusicPlayerService;
 import za.co.samtakie.samtakieradio.services.contentcatalogs.MusicLibrary;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment implements IOnFocusListenable{
 
     private int radioID;
     private int adapterPosition;
@@ -50,8 +51,7 @@ public class DetailFragment extends Fragment {
     private ImageView mAlbumArt;
     private TextView mTitleTextView;
     private TextView mArtistTextView;
-    private ImageView mMediaControlsImage;
-    //private MediaSeekBar mSeekBarAudio;
+    private ImageButton mMediaControlsImage;
     private MediaBrowserHelper mMediaBrowserHelper;
     private boolean mIsPlaying;
 
@@ -59,7 +59,7 @@ public class DetailFragment extends Fragment {
     private FloatingActionButton fabDel;
     private Context context;
     MusicLibrary musicLibrary;
-    boolean firstime = true;
+    boolean updatePlayImage;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -105,7 +105,7 @@ public class DetailFragment extends Fragment {
         mTitleTextView = view.findViewById(R.id.song_title);
         mArtistTextView = view.findViewById(R.id.song_artist);
         mAlbumArt = view.findViewById(R.id.album_art);
-        mMediaControlsImage = view.findViewById(R.id.button_play);
+        mMediaControlsImage = (ImageButton) view.findViewById(R.id.button_play);
         //mSeekBarAudio = view.findViewById(R.id.seekbar_audio);
 
         final ClickListener clickListener = new ClickListener();
@@ -281,11 +281,31 @@ public class DetailFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("DF", "onResume is call");
+        /*if(mIsPlaying){
+            mMediaControlsImage.setPressed(mIsPlaying);
+        }else {
+            mMediaControlsImage.setPressed(mIsPlaying);
+        }*/
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
+        Log.d("DF", "onPause is call");
         //mSeekBarAudio.disconnectController();
         mMediaBrowserHelper.onStop();
     }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+       if(mIsPlaying){
+            mMediaControlsImage.setPressed(mIsPlaying);
+        }
+    }
+
 
     /**
      * Convenience class to collect the click listeners together.
@@ -301,6 +321,7 @@ public class DetailFragment extends Fragment {
                 case R.id.button_play:
                     if (mIsPlaying) {
                         mMediaBrowserHelper.getTransportControls().pause();
+                        //mMediaControlsImage.setSelected(true);
                     } else {
                         mMediaBrowserHelper.getTransportControls().play();
                     }
@@ -362,6 +383,7 @@ public class DetailFragment extends Fragment {
             mIsPlaying = playbackState != null &&
                     playbackState.getState() == PlaybackStateCompat.STATE_PLAYING;
             mMediaControlsImage.setPressed(mIsPlaying);
+
         }
 
         @Override
@@ -430,4 +452,6 @@ public class DetailFragment extends Fragment {
         outState.putString("radio_link", radioLink);
 
     }
+
+
 }

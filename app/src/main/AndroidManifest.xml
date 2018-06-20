@@ -30,7 +30,7 @@
         </activity>
 
         <provider
-            android:name=".data.RadioContentProvider"
+            android:name=".provider.RadioContentProvider"
             android:authorities="za.co.samtakie.samtakieradio"
             android:exported="true" />
 
@@ -43,7 +43,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />
-
             </intent-filter>
         </service>
 
@@ -74,7 +73,27 @@
 
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
+
+        <service android:name=".fcm.OnlineRadioFirebaseInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".fcm.OnlineRadioFirebaseMessageService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".ui.News"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/DetailTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

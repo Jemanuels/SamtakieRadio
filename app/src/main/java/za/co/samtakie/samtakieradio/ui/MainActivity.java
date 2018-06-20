@@ -11,8 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -20,29 +18,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import za.co.samtakie.samtakieradio.R;
 import za.co.samtakie.samtakieradio.RadioConnection;
 import za.co.samtakie.samtakieradio.SettingsActivity;
-import za.co.samtakie.samtakieradio.data.Contract;
-import za.co.samtakie.samtakieradio.data.RadioAdapter;
+import za.co.samtakie.samtakieradio.provider.Contract;
 import za.co.samtakie.samtakieradio.sync.RadioSyncUtils;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.RadioAdapterOnClickHandler {
-
-    private RecyclerView mRecyclerView; // declare a variable of Object RecyclerView
-
-    private RadioAdapter mAdapter; // declare a variable of Object RadioAdapter
-
-    /*Initialize a constant of Type int with a value 10, this will be used to query the Online radio
-    table*/
-    private static final int ID_RADIO_LOADER = 10;
-
-    /*Initialize a constant of Type int with a value 20, this will be used to query the Online Favorite
-    table*/
-    private static final int ID_RADIO_FAV_LOADER = 20;
-
-    private ShareActionProvider mShareActionProvider;
-
 
     /* Initialize a constant of Type String to hold the Activity class name */
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -50,6 +34,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
     // initialize variable for wifi and mobile connection
     private boolean isConnectedWifi;
     private boolean isConnectedMobile;
+    // Check in place for showing the Alert dialog one in the app lifecycle
+    private boolean showDialog = true;
+
+    private Toolbar toolbar;
 
     /* Static variable linked to the column index for passing into the Cursor to get the correct
     *  column data  0 represent the first column and n represent the last column */
@@ -58,141 +46,123 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
     public static final int INDEX_COLUMN_ONLINE_RADIO_LINK = 2;
     public static final int INDEX_COLUMN_ONLINE_RADIO_IMAGE = 3;
 
-    /* The columns of data that we are interested in displaying within our MainActivity's list of
-    * Radio data */
-    public static final String[] MAIN_RADIO_PROJECTION = {
-            Contract.RadioEntry._ID,
-            Contract.RadioEntry.COLUMN_ONLINE_RADIO_NAME,
-            Contract.RadioEntry.COLUMN_ONLINE_RADIO_LINK,
-            Contract.RadioEntry.COLUMN_ONLINE_RADIO_IMAGE,
-            Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID
-    };
-
+    /* Set the Fragment tag name to be use for restoring the main Fragment */
     private static final String TAG_MAIN_FRAGMENT = "mainFragment";
 
+    /* set true if the device is a tablet size */
     private boolean tabletSize;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /* Subscribe to the susanie topics, this will make sure that all message sent with this topic
+        * will be received by any user using this app */
+        FirebaseMessaging.getInstance().subscribeToTopic("susanie");
+
+        /* Create a new object of MainFragment*/
         MainFragment mainFragment = new MainFragment();
 
+        /* set tabletSize to true if the device is a tablet size.
+        * The layout file in values-large or sw600dp will be used which is true */
         tabletSize = getResources().getBoolean(R.bool.screen_large);
 
+        /* If the tabletSize is true and the savedInstance is equal to null, add the mainFragment object
+        * to the fragmentManager and use layout fragment_main_master and commit
+        * This means that Main and Detail will be loaded in one activity */
         if(tabletSize){
-            Log.d(TAG, "Activity has been loaded in a Tablet");
             if(savedInstanceState == null) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .add(R.id.fragment_main_master, mainFragment, TAG_MAIN_FRAGMENT)
                         .commit();
             } else {
+                /* else reload the mainFragment using the tag name */
                 mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(TAG_MAIN_FRAGMENT);
-
             }
+
         } else {
+            /* Else if not a tablet size load fragment_main for phone devices, and if the savedInstanceState
+             * is null add the mainFragment object to the fragmentManager and commit */
             if(savedInstanceState == null) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .add(R.id.fragment_main, mainFragment, TAG_MAIN_FRAGMENT)
+                        .replace(R.id.fragment_main, mainFragment, TAG_MAIN_FRAGMENT)
                         .commit();
             } else {
+                /* Else reload the mainFragment using the tag name*/
                 mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(TAG_MAIN_FRAGMENT);
 
             }
         }
 
 
-
-// Run this once if the app is being run for the first time.
-        // This will add the data into the database before a Loader call is being made
+        /* Run this once if the app is being run for the first time.
+         * This will add the data into the database before a Loader call is being made. */
         RadioSyncUtils.initialize(this, Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO);
 
-
-
+        /* Gets a SharedPreferences instance that points to the default file that is used by
+        the preference framework in the given context. Returns a SharedPreferences(prefs) instance that
+        can be used to retrieve and listen to values of the preferences. */
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //prefs.registerOnSharedPreferenceChangeListener(this);*/
 
-
-
-        Log.d("Main", "oncreate is being called");
-
-
-
+        // If connected via WiFi set the value of isConnectedWifi to true
         isConnectedWifi = RadioConnection.haveNetworkConnectionWifi(this);
+
+        // If connected via Mobile Data set the value of isConnectedMobile to true;
         isConnectedMobile = RadioConnection.haveNetworkConnectionMobile(this);
-        boolean mobileData = prefs.getBoolean("example_switch", false);
+
+
+
+        boolean mobileData = prefs.getBoolean("example_switch1", false);
         //prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Log.d("Switch", ""+prefs.getBoolean("example_switch", false));
         Log.d("View", ""+prefs.getString("example_list", "0"));
         if(mobileData) {
-            if (RadioConnection.haveNetworkConnectionMobile(this)) {
-                Toast.makeText(this, "You are connected via Mobile", Toast.LENGTH_LONG).show();
+            if (isConnectedMobile) {
+                // Get the value of MobileData in the preference settings
+                //Boolean mobileDataOn = prefs.getBoolean("example_switch1", false);
+                String msgMobileDataOn = "Mobile Data is on for the App";
+
+                //Toast.makeText(this, "You are connected via Mobile", Toast.LENGTH_LONG).show();
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
                 } else {
                     builder = new AlertDialog.Builder(this);
                 }
-                builder.setTitle("Mobile Data Activated")
-                        .setMessage("Are you sure you want activate it?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-                                startActivity(settingsIntent);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                MainActivity.this.finish();
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                if(showDialog) {
+                    builder.setTitle("Your are connected via Mobile Data")
+                            .setMessage("You can change the setting for the mobile data in the setting " +
+                                    " screen. " + msgMobileDataOn)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                                    startActivity(settingsIntent);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MainActivity.this.finish();
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    showDialog = false;
+                }
             }
         }
 
-        if(RadioConnection.haveNetworkConnectionWifi(this)){
+        // Show the user a Toast message if the user is connected via the WiFi
+        if(isConnectedWifi){
             Toast.makeText(this, "You are connected via Wifi", Toast.LENGTH_LONG).show();
         }
 
-        /*// Initialize the mRecyclerView
-        mRecyclerView = (RecyclerView)findViewById(R.id.recyclerView);
-
-        // Set the layout Manager, use a GridLayoutManager to be able to add more than one column
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
-        *//* Initialize the mAdapter by creating a new object of the RadioAdapter passing the following parameters
-        Context(this), ClickHandler(this) *//*
-        mAdapter = new RadioAdapter(this, this);
-
-        // Bind the mRecyclerView with the mAdapter object
-        mRecyclerView.setAdapter(mAdapter);
-
-        // Initialize the toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
-        //Set the toolbar to act as the ActionBar for this Activity window.
-        setSupportActionBar(toolbar);*/
-
-        // Run this once if the app is being run for the first time.
-        // This will add the data into the database before a Loader call is being made
-        //RadioSyncUtils.initialize(this, Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO);
-
-        /* Ensures a loader is initialized and active. If the loader doesn't already exist,
-        one is created and (if the activity/fragment is currently started) starts the loader.
-        Otherwise the last created loader is re-used.*/
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
+        // Set the toolbar to be loaded.
+        toolbar = findViewById(R.id.toolbar);
         //Set the toolbar to act as the ActionBar for this Activity window.
         setSupportActionBar(toolbar);
-
-
-
     }
 
 
@@ -201,11 +171,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
     public boolean onCreateOptionsMenu(Menu menu) {
         // inflate the menu layout
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-
         return true;
     }
-
 
 
     @Override
@@ -230,6 +197,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
                 startActivity(share);
                 return true;
 
+            case R.id.action_news:
+                Intent news = new Intent(this, News.class);
+                startActivity(news);
+                return true;
+
                 default:
                     // Do nothing for the time being
 
@@ -238,75 +210,15 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
     }
 
     /**
-     * This function wil show the Toast message on screen
+     * This function will show the Toast message on screen
      * @param message Hold the text of the message to be shown
      */
     public void displayToast(String message){
-        //Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        //Todo: Add Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show(); to @displayToast method
         Log.d(TAG, message);
     }
 
-    /*@NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
-
-        switch (id){
-            case ID_RADIO_LOADER:
-                Uri radioQueryUri = Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO;
-                displayToast("ID Radio Loader request");
-                String sortRadio = Contract.RadioEntry.COLUMN_ONLINE_RADIO_NAME + " ASC";
-
-                return new CursorLoader(
-                        this,
-                        radioQueryUri,
-                        MAIN_RADIO_PROJECTION,
-                        null,
-                        null,
-                        sortRadio);
-
-            case ID_RADIO_FAV_LOADER:
-                Uri radioFavQueryUri = Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_FAV;
-                displayToast("ID Radio Loader request for Fav list");
-                String sortRadioFav = Contract.RadioEntry.COLUMN_ONLINE_RADIO_NAME + " ASC";
-
-                return new CursorLoader(
-                        this,
-                        radioFavQueryUri,
-                        MAIN_RADIO_PROJECTION,
-                        null,
-                        null,
-                        sortRadioFav);
-
-                default:
-                    throw new RuntimeException("Loader Not Implemented: " + id);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-
-        // Todo: Add a loading indicator while the recycler view is loading the data
-        // Todo: hide the Loading indicator after the data has been successfully loaded in the recycler view
-
-
-        mAdapter.swapCursor(data);
-
-
-
-        if(data.getCount() != 0){
-            // Todo: use this if block to show the list if the data object is greater than 0
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
-    }*/
-
     public void startDetailActivity(View view,int radioID,  int contentPosition, String radioLink, String radioName, String radioImage) {
-
-
-
         if(tabletSize){
             Log.d(TAG, "Activity has been loaded in a Tablet");
             //if(savedInstanceState == null) {
@@ -344,30 +256,31 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
         startDetailActivity(view, radioID, adapterPosition, radioLink, radioName, radioImage);
     }
 
-    /*@Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if(sharedPreferences.getString(s, "Default_List").equals("Default_List")){
-            Log.d("PrefMain", "DEfault has been selected");
-            getSupportLoaderManager().initLoader(ID_RADIO_LOADER, null, this);
-        } else {
-            Log.d("PrefMain", "Something is missing: " + s);
-            getSupportLoaderManager().initLoader(ID_RADIO_FAV_LOADER, null, this);
-        }
-    }*/
-
     @Override
     protected void onStop() {
         super.onStop();
-        /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.unregisterOnSharedPreferenceChangeListener(this);*/
-        Log.d("Main", "onstop is being called");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(!showDialog){
+            showDialog = false;
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(showDialog){
+            showDialog = false;
+        }
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //prefs.unregisterOnSharedPreferenceChangeListener(this);
-        Log.d("Main", "ondestroy is being called");
     }
 }

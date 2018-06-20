@@ -1,4 +1,4 @@
-package za.co.samtakie.samtakieradio.data;
+package za.co.samtakie.samtakieradio.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -19,6 +19,9 @@ public class RadioContentProvider extends ContentProvider {
     public static final int RADIO_FAV = 200;
     public static final int RADIO_FAV_ID = 201;
 
+    public static final int RADIO_NEWS = 300;
+    public static final int RADIO_NEWS_ID = 301;
+
     private final static UriMatcher sUriMatcher = buildUriMatcher();
 
     private DbHelper mDbHelper;
@@ -35,6 +38,10 @@ public class RadioContentProvider extends ContentProvider {
         uriMatcher.addURI(Contract.AUTHORITY, Contract.PATH_ONLINE_RADIO_FAV, RADIO_FAV);
 
         uriMatcher.addURI(Contract.AUTHORITY, Contract.PATH_ONLINE_RADIO_FAV + "/#", RADIO_FAV_ID);
+
+        uriMatcher.addURI(Contract.AUTHORITY, Contract.PATH_ONLINE_RADIO_NEWS, RADIO_NEWS);
+
+        uriMatcher.addURI(Contract.AUTHORITY, Contract.PATH_ONLINE_RADIO_NEWS + "/#", RADIO_NEWS_ID);
 
         return uriMatcher;
     }
@@ -58,7 +65,6 @@ public class RadioContentProvider extends ContentProvider {
                 int rowInserted = 0;
                 try{
                     for(ContentValues value : values){
-                        Log.d("Content provider ", value.toString());
                         long _id = db.insert(Contract.RadioEntry.TABLE_NAME, null, value);
                         if(_id != -1){
                             rowInserted++;
@@ -147,6 +153,39 @@ public class RadioContentProvider extends ContentProvider {
 
                 break;
             }
+
+
+            case RADIO_NEWS_ID:{
+                String[] selectionArguments = new String[]{uri.getLastPathSegment()};
+
+                cursor = mDbHelper.getReadableDatabase().query(
+                        Contract.RadioEntry.TABLE_NAME_NEWS,
+                        projection,
+                        Contract.RadioEntry._ID + " = ? ",
+                        selectionArguments,
+                        null,
+                        null,
+                        sortOrder);
+
+                break;
+
+
+
+            }
+
+            case RADIO_NEWS:{
+                cursor = mDbHelper.getReadableDatabase().query(
+                        Contract.RadioEntry.TABLE_NAME_NEWS,
+                        projection,
+                        selection,
+                        selectionArg,
+                        null,
+                        null,
+                        sortOrder);
+
+                break;
+            }
+
             default:
               throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -192,6 +231,16 @@ public class RadioContentProvider extends ContentProvider {
 
                 break;
 
+            case RADIO_NEWS:
+                long idNews = db.insert(Contract.RadioEntry.TABLE_NAME_NEWS, null, contentValues);
+                if(idNews > 0){
+                    returnUri = ContentUris.withAppendedId(Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_NEWS, idNews);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+
+                break;
+
 
 
                 default:
@@ -221,6 +270,24 @@ public class RadioContentProvider extends ContentProvider {
             case RADIO_FAV:
                 numRowsDeleted = mDbHelper.getWritableDatabase().delete(
                         Contract.RadioEntry.TABLE_NAME_FAV,
+                        selection,
+                        selectionArgs);
+
+                break;
+
+            case RADIO_NEWS_ID:
+                String[] selectionArguments = new String[]{uri.getLastPathSegment()};
+
+                numRowsDeleted = mDbHelper.getWritableDatabase().delete(
+                        Contract.RadioEntry.TABLE_NAME_FAV,
+                        Contract.RadioEntry._ID + " = ? ",
+                        selectionArguments);
+
+                break;
+
+            case RADIO_NEWS:
+                numRowsDeleted = mDbHelper.getWritableDatabase().delete(
+                        Contract.RadioEntry.TABLE_NAME_NEWS,
                         selection,
                         selectionArgs);
 

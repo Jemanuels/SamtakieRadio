@@ -1,26 +1,20 @@
 package za.co.samtakie.samtakieradio.ui;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,14 +23,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import za.co.samtakie.samtakieradio.R;
-import za.co.samtakie.samtakieradio.RadioConnection;
 import za.co.samtakie.samtakieradio.SettingsActivity;
-import za.co.samtakie.samtakieradio.data.Contract;
-import za.co.samtakie.samtakieradio.data.RadioAdapter;
-import za.co.samtakie.samtakieradio.sync.RadioSyncUtils;
+import za.co.samtakie.samtakieradio.provider.Contract;
+import za.co.samtakie.samtakieradio.provider.RadioAdapter;
 
 
 /**
@@ -58,6 +50,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private String mParam2;
 
     private RadioAdapterOnClickHandler mListener;
+
+
 
     private RecyclerView mRecyclerView;
     private RadioAdapter mAdapter;
@@ -155,12 +149,20 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if(sharedPreferences.getString(s, "Default_List").equals("Default_List")){
-            Log.d("PrefMain", "DEfault has been selected");
-            getLoaderManager().initLoader(ID_RADIO_LOADER, null, this);
-        } else {
-            Log.d("PrefMain", "Something is missing: " + s);
-            getLoaderManager().initLoader(ID_RADIO_FAV_LOADER, null, this);
+        Log.d("PrefMain", "What sits in String s" + s);
+        if(s.equals("example_list")) {
+            Log.d("PrefMain", "View settings has been changed");
+            if (sharedPreferences.getString(s, "Default_List").equals("Default_List")) {
+                Log.d("PrefMain", "DEfault has been selected");
+                getLoaderManager().initLoader(ID_RADIO_LOADER, null, this);
+            } else {
+                Log.d("PrefMain", "Load the Fav loader: " + s);
+                getLoaderManager().initLoader(ID_RADIO_FAV_LOADER, null, this);
+            }
+        }else if(s.equals("example_switch")){
+            Log.d("PrefMain", "Switch has been selected: " + s);
+        }else if(s.equals("example_switch1")) {
+            Log.d("PrefMain", "Switch has been selected: " + s);
         }
     }
 
@@ -169,6 +171,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+
+
 
         mRecyclerView = (RecyclerView)  view.findViewById(R.id.recyclerView);
 
@@ -181,18 +185,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         mAdapter = new RadioAdapter(context, mListener);
 
         mRecyclerView.setAdapter(mAdapter);
-
-        // Initialize the mRecyclerView
-
-
-
-
-        /*// Initialize the toolbar
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-
-        //Set the toolbar to act as the ActionBar for this Activity window.
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-*/
 
         return view;
     }

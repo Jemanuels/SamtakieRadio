@@ -57,9 +57,7 @@ public class MediaBrowserHelper {
                             mMediaBrowserConnectionCallback,
                             null);
             mMediaBrowser.connect();
-
         }
-        Log.d(TAG, "onStart: Creating MediaBrowser, and connecting");
     }
 
     public void onStop() {
@@ -72,7 +70,6 @@ public class MediaBrowserHelper {
             mMediaBrowser = null;
         }
         resetState();
-        Log.d(TAG, "onStop: Releasing MediaController, Disconnecting from MediaBrowser");
     }
 
     /**
@@ -122,12 +119,10 @@ public class MediaBrowserHelper {
                 callback.onPlaybackStateChanged(null);
             }
         });
-        Log.d(TAG, "resetState: ");
     }
 
     public MediaControllerCompat.TransportControls getTransportControls() {
         if (mMediaController == null) {
-            Log.d(TAG, "getTransportControls: MediaController is null!");
             throw new IllegalStateException("MediaController is null!");
         }
         return mMediaController.getTransportControls();
@@ -187,7 +182,6 @@ public class MediaBrowserHelper {
 
                 MediaBrowserHelper.this.onConnected(mMediaController);
             } catch (RemoteException e) {
-                Log.d(TAG, String.format("onConnected: Problem: %s", e.toString()));
                 throw new RuntimeException(e);
             }
 
@@ -240,5 +234,4 @@ public class MediaBrowserHelper {
             MediaBrowserHelper.this.onDisconnected();
         }
     }
-
 }

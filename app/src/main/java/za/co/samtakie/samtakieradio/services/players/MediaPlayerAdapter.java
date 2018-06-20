@@ -63,31 +63,7 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
                 new DefaultRenderersFactory(mContext),
                 new DefaultTrackSelector(), new DefaultLoadControl());
 
-        //player.addListener(mContext);
-        //player.addAudioDebugListener(componentListener);
-
-
         player.setPlayWhenReady(playWhenReady);
-
-
-
-
-        /*if (mMediaPlayer == null) {
-            mMediaPlayer = new MediaPlayer();
-            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    mPlaybackInfoListener.onPlaybackCompleted();
-
-                    // Set the state to "paused" because it most closely matches the state
-                    // in MediaPlayer with regards to available state transitions compared
-                    // to "stop".
-                    // Paused allows: seekTo(), start(), pause(), stop()
-                    // Stop allows: stop()
-                    setNewState(PlaybackStateCompat.STATE_PAUSED);
-                }
-            });
-        }*/
     }
 
     private MediaSource buildMediaSource(Uri uri) {
@@ -103,7 +79,6 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
         mCurrentMedia = metadata;
         final String mediaId = metadata.getDescription().getMediaId();
         playFile(MusicLibrary.getMusicFilename(mediaId));
-        //playFile("http://s6.voscast.com:8150/;");
 
     }
 
@@ -167,14 +142,8 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
     }
 
     private void release() {
-        /*if (mMediaPlayer != null) {
-            mMediaPlayer.release();
-            mMediaPlayer = null;
-        }*/
         if(player != null){
             playWhenReady = false;
-            //player.removeListener(this);
-            //player.removeAudioDebugListener(this);
             player.stop();
             player.release();
             player = null;

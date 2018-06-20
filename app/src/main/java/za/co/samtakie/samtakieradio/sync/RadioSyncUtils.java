@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import za.co.samtakie.samtakieradio.data.Contract;
+import za.co.samtakie.samtakieradio.provider.Contract;
 
 public class RadioSyncUtils {
 

@@ -66,23 +66,7 @@ public class MediaNotificationManager {
                         MediaButtonReceiver.buildMediaButtonPendingIntent(
                                 mService,
                                 PlaybackStateCompat.ACTION_PAUSE));
-        /*mNextAction =
-                new NotificationCompat.Action(
-                        R.drawable.ic_skip_next_white_24dp,
-                        mService.getString(R.string.label_next),
-                        MediaButtonReceiver.buildMediaButtonPendingIntent(
-                                mService,
-                                PlaybackStateCompat.ACTION_SKIP_TO_NEXT));
-        mPrevAction =
-                new NotificationCompat.Action(
-                        R.drawable.ic_skip_previous_white_24dp,
-                        mService.getString(R.string.label_previous),
-                        MediaButtonReceiver.buildMediaButtonPendingIntent(
-                                mService,
-                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS));*/
 
-        // Cancel all notifications to handle the case where the Service was killed and
-        // restarted by the system.
         mNotificationManager.cancelAll();
     }
 
@@ -114,8 +98,6 @@ public class MediaNotificationManager {
             createChannel();
         }
 
-
-
         Uri radioImgLink = description.getIconUri();
         String samtakieUrl = "http://www.samtakie.co.za/img/samtakie_radio/";
         String imgRadioUrl = samtakieUrl + radioImgLink +".jpg";
@@ -134,13 +116,6 @@ public class MediaNotificationManager {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 builder.setLargeIcon(bitmap);
-
-                // Send the notification again to update it with the right image
-
-                //getNotificationManager().notify();
-                Log.d("DEBUG", "Image finish loading");
-
-                //getNotificationManager().notify(NOTIFICATION_ID,notification);
             }
 
             @Override
@@ -175,9 +150,6 @@ public class MediaNotificationManager {
                 // Subtitle - Usually Artist name.
                 .setContentText(description.getSubtitle())
 
-
-
-
                 // When notification is deleted (when playback is paused and notification can be
                 // deleted) fire MediaButtonPendingIntent with ACTION_STOP.
                 .setDeleteIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(
@@ -185,8 +157,6 @@ public class MediaNotificationManager {
                 // Show controls on lock screen even when user hides sensitive content.
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
-
-        Log.d("Notification", imgRadioUrl);
 
         /*// If skip to next action is enabled.
         if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS) != 0) {
@@ -223,9 +193,6 @@ public class MediaNotificationManager {
             mChannel.setVibrationPattern(
                     new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
             mNotificationManager.createNotificationChannel(mChannel);
-            Log.d(TAG, "createChannel: New channel created");
-        } else {
-            Log.d(TAG, "createChannel: Existing channel reused");
         }
     }
 
@@ -239,5 +206,4 @@ public class MediaNotificationManager {
         return PendingIntent.getActivity(
                 mService, REQUEST_CODE, openUI, PendingIntent.FLAG_CANCEL_CURRENT);
     }
-
 }

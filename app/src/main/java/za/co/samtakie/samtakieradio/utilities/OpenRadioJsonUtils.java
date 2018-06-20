@@ -8,7 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import za.co.samtakie.samtakieradio.data.Contract;
+import za.co.samtakie.samtakieradio.provider.Contract;
 
 public class OpenRadioJsonUtils {
 

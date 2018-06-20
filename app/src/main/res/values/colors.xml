@@ -2,7 +2,6 @@
 <resources>
 
     <color name="colorAccent">#c53d13</color>
-
     <color name="colorPrimary">#ff5722</color>
     <color name="colorPrimaryDark">#c41c00</color>
     <color name="colorPrimaryLight">#ff8a50</color>
@@ -11,15 +10,6 @@
     <color name="colorSecondaryDark">#c53d13</color>
     <color name="colorPrimaryText">#fafafa</color>
     <color name="colorSecondaryText">#fbe9e7</color>
-
-    <color name="primaryColor">#673ab7</color>
-    <color name="primaryLightColor">#9a67ea</color>
-    <color name="primaryDarkColor">#320b86</color>
-    <color name="secondaryColor">#69f0ae</color>
-    <color name="secondaryLightColor">#9fffe0</color>
-    <color name="secondaryDarkColor">#2bbd7e</color>
-    <color name="primaryTextColor">#ffffff</color>
-    <color name="secondaryTextColor">#000000</color>
 
     <color name="notification_bg">#ff5722</color>
 

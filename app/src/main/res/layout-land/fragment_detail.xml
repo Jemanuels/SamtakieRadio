@@ -56,7 +56,7 @@
         app:layout_constraintTop_toBottomOf="@+id/song_title"
         tools:text="Song Artist" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/button_play"
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -67,25 +67,11 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/circle"
         android:contentDescription="@string/label_play_pause"
-        android:text="Play"
-        android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/album_art"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/song_artist"
         app:srcCompat="@drawable/ic_play_pause_toggle" />
-
-    <!--<za.co.samtakie.samtakieradio.MediaSeekBar
-        android:id="@+id/seekbar_audio"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

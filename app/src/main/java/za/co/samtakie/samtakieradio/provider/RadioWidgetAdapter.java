@@ -1,4 +1,4 @@
-package za.co.samtakie.samtakieradio.data;
+package za.co.samtakie.samtakieradio.provider;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,9 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.util.ArrayList;
-
 import za.co.samtakie.samtakieradio.R;
 import za.co.samtakie.samtakieradio.ui.ItemFragment;
 import za.co.samtakie.samtakieradio.ui.MainActivity;
-import za.co.samtakie.samtakieradio.ui.MainFragment.RadioAdapterOnClickHandler;
 
 /***
  * Created by Jurgen Emanuels on the 02/05/2018
@@ -32,8 +28,6 @@ import za.co.samtakie.samtakieradio.ui.MainFragment.RadioAdapterOnClickHandler;
  */
 public class RadioWidgetAdapter extends RecyclerView.Adapter<RadioWidgetAdapter.RadioViewHolder>{
 
-
-    private ArrayList<Radio> mRadioData;
     private final Context mContext;
     private Cursor cursor;
 
@@ -108,17 +102,6 @@ public class RadioWidgetAdapter extends RecyclerView.Adapter<RadioWidgetAdapter.
                                             holder.mRadioNameText.setTextColor(textSwatch.getBodyTextColor());
                                             return;
                                         }
-
-
-
-                                        /*if(bgSwatch != null){
-                                            holder.subHeadText.setBackgroundColor(bgSwatch.getRgb());
-                                            holder.subHeadText.setTextColor(bgSwatch.getBodyTextColor());
-                                            return;
-                                        }*/
-
-
-
                                     }
                                 });
 
@@ -134,7 +117,6 @@ public class RadioWidgetAdapter extends RecyclerView.Adapter<RadioWidgetAdapter.
 
                     }
                 });
-        Log.d("Check image: ", imgRadioUrl);
     }
 
     @Override
@@ -161,7 +143,6 @@ public class RadioWidgetAdapter extends RecyclerView.Adapter<RadioWidgetAdapter.
             super(itemView);
             mRadioNameText = (TextView)itemView.findViewById(R.id.radioName);
             radioImageView = (ImageView) itemView.findViewById(R.id.radioImage);
-            //subHeadText = (TextView)itemView.findViewById(R.id.subHead);
 
             itemView.setOnClickListener(this);
         }

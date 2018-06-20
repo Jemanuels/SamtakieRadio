@@ -1,4 +1,4 @@
-package za.co.samtakie.samtakieradio.data;
+package za.co.samtakie.samtakieradio.provider;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -16,16 +16,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Cache;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.util.ArrayList;
+import java.util.concurrent.Executors;
 
-
-import za.co.samtakie.samtakieradio.ui.ItemFragment.*;
 import za.co.samtakie.samtakieradio.ui.MainActivity;
 import za.co.samtakie.samtakieradio.R;
-import za.co.samtakie.samtakieradio.ui.MainFragment;
 import za.co.samtakie.samtakieradio.ui.MainFragment.RadioAdapterOnClickHandler;
 
 /***
@@ -35,8 +33,6 @@ import za.co.samtakie.samtakieradio.ui.MainFragment.RadioAdapterOnClickHandler;
  */
 public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHolder>{
 
-
-    private ArrayList<Radio> mRadioData;
     private final Context mContext;
     private Cursor cursor;
 
@@ -80,7 +76,6 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHol
         return new RadioViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull final RadioViewHolder holder, int position) {
         cursor.moveToPosition(position);
@@ -89,9 +84,11 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHol
         String imgRadioUrl = samtakieUrl + radioImgLink +".jpg";
         String radio = cursor.getString(MainActivity.INDEX_COLUMN_ONLINE_RADIO_NAME);
         holder.mRadioNameText.setText(radio);
+
         Picasso.get()
                 .load(Uri.parse(imgRadioUrl))
-                .resize(400, 400)
+                .resize(200, 200)
+                .onlyScaleDown()
                 .placeholder(R.drawable.main_background)
                 .into(new Target() {
                     @Override
@@ -112,20 +109,8 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHol
                                             holder.mRadioNameText.setTextColor(textSwatch.getBodyTextColor());
                                             return;
                                         }
-
-
-
-                                        /*if(bgSwatch != null){
-                                            holder.subHeadText.setBackgroundColor(bgSwatch.getRgb());
-                                            holder.subHeadText.setTextColor(bgSwatch.getBodyTextColor());
-                                            return;
-                                        }*/
-
-
-
                                     }
                                 });
-
                     }
 
                     @Override
@@ -137,8 +122,8 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHol
                     public void onPrepareLoad(Drawable placeHolderDrawable) {
 
                     }
+
                 });
-        Log.d("Check image: ", imgRadioUrl);
     }
 
     @Override
@@ -159,7 +144,6 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHol
 
         private TextView mRadioNameText;
         private ImageView radioImageView;
-        private TextView subHeadText;
         private CardView crRadio;
 
         public RadioViewHolder(View itemView) {
@@ -167,9 +151,6 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHol
             mRadioNameText = (TextView)itemView.findViewById(R.id.radioName);
             radioImageView = (ImageView) itemView.findViewById(R.id.radioImage);
             crRadio = (CardView) itemView.findViewById(R.id.cv_radio);
-
-            //subHeadText = (TextView)itemView.findViewById(R.id.subHead);
-
             itemView.setOnClickListener(this);
         }
 

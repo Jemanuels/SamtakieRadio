@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "308638734548",
+    "firebase_url": "https://onlineradio-1c59f.firebaseio.com",
+    "project_id": "onlineradio-1c59f",
+    "storage_bucket": "onlineradio-1c59f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:308638734548:android:c45da62cde5c7ab1",
+        "android_client_info": {
+          "package_name": "za.co.samtakie.samtakieradio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "308638734548-g6d5cektvavn14ag8gtiple593j71597.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "308638734548-g6d5cektvavn14ag8gtiple593j71597.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcaPMgCzsGXv1yD7Do9gFn6thsfvjeXcc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

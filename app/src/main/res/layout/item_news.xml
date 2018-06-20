@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:paddingBottom="8dp"
+    android:paddingEnd="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="8dp">
+
+    <ImageView
+        android:id="@+id/author_image_view"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/admin" />
+
+    <TextView
+        android:id="@+id/author_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/author_image_view"
+        android:fontFamily="sans-serif-medium"
+        android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingStart="8dp"
+        tools:text="Admin"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/date_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text=". 03m"
+        android:layout_toRightOf="@id/author_text_view"
+        android:textColor="@color/colorSecondary"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/news_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/date_text_view"
+android:visibility="invisible"
+        android:paddingEnd="8dp"
+        tools:text="1"
+        android:paddingLeft="8dp"
+        android:paddingStart="8dp"
+        />
+
+
+    <TextView
+        android:id="@+id/message_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/author_text_view"
+        android:layout_below="@id/author_text_view"
+        android:paddingEnd="8dp"
+        tools:text="New version has been released ,please check it out"
+        android:paddingLeft="8dp"
+        android:paddingStart="8dp"
+        android:textColor="@color/colorPrimaryLight"
+        android:textSize="14sp" />
+
+
+</RelativeLayout>

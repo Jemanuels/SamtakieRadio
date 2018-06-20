@@ -3,7 +3,6 @@ package za.co.samtakie.samtakieradio.services;
 
 import android.app.Notification;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -11,7 +10,6 @@ import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
-import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
@@ -53,12 +51,7 @@ public class MusicPlayerService extends MediaBrowserServiceCompat {
 
 
         mPlayback = new MediaPlayerAdapter(this, new MediaPlayerListener());
-
-        Log.d(TAG, "onCreate: MusicService creating MediaSession, and MediaNotificationManager");
-
     }
-
-
 
 
 
@@ -75,7 +68,6 @@ public class MusicPlayerService extends MediaBrowserServiceCompat {
 
         //release the MediaSessionCompat for a new playback
         mSession.release();
-        Log.d(TAG, "onDestroy: MediaPlayerAdapter stopped, and MediaSession released");
     }
 
     @Override
@@ -150,7 +142,6 @@ public class MusicPlayerService extends MediaBrowserServiceCompat {
             }
 
             mPlayback.playFromMedia(mPreparedMedia);
-            Log.d(TAG, "onPlayFromMediaId: MediaSession active");
         }
 
         @Override
@@ -165,19 +156,15 @@ public class MusicPlayerService extends MediaBrowserServiceCompat {
             mSession.release();
         }
 
-        /*@Override
+        @Override
         public void onSkipToNext() {
-            mQueueIndex = (++mQueueIndex % mPlaylist.size());
-            mPreparedMedia = null;
-            onPlay();
+
         }
 
         @Override
         public void onSkipToPrevious() {
-            mQueueIndex = mQueueIndex > 0 ? mQueueIndex - 1 : mPlaylist.size() - 1;
-            mPreparedMedia = null;
-            onPlay();
-        }*/
+
+        }
 
         @Override
         public void onSeekTo(long pos) {

@@ -18,8 +18,16 @@
         />
 
     <item
+        android:id="@+id/action_news"
+        android:orderInCategory="20"
+        android:icon="@drawable/ic_message"
+        android:title="@string/action_message"
+        app:showAsAction="ifRoom"
+        />
+
+    <item
         android:id="@+id/action_refresh"
-        android:orderInCategory="100"
+        android:orderInCategory="30"
         android:icon="@drawable/ic_sync"
         android:title="@string/action_sync"
         app:showAsAction="ifRoom"

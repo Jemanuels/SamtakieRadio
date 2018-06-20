@@ -19,9 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import za.co.samtakie.samtakieradio.R;
-import za.co.samtakie.samtakieradio.data.Contract;
-import za.co.samtakie.samtakieradio.data.RadioAdapter;
-import za.co.samtakie.samtakieradio.data.RadioWidgetAdapter;
+import za.co.samtakie.samtakieradio.provider.Contract;
+import za.co.samtakie.samtakieradio.provider.RadioWidgetAdapter;
 
 
 /**
