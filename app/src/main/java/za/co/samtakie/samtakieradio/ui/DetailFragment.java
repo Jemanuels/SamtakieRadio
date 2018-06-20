@@ -106,31 +106,17 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
         mArtistTextView = view.findViewById(R.id.song_artist);
         mAlbumArt = view.findViewById(R.id.album_art);
         mMediaControlsImage = (ImageButton) view.findViewById(R.id.button_play);
-        //mSeekBarAudio = view.findViewById(R.id.seekbar_audio);
 
         final ClickListener clickListener = new ClickListener();
-        //findViewById(R.id.button_previous).setOnClickListener(clickListener);
         mMediaControlsImage.setOnClickListener(clickListener);
-        //findViewById(R.id.button_next).setOnClickListener(clickListener);
-
-
-
 
         //musicLibrary.setRadioTitle(radioTitle);
         musicLibrary = new MusicLibrary("Djoga_"+radioID, radioName, "Brought to you by Samtakie", "Online Radio Samtakie", "Radio", 100, TimeUnit.SECONDS,
                 radioLink, R.drawable.album_jazz_blues, radioImage);
 
-
         musicLibrary.createMediaMetadataCompat();
         mMediaBrowserHelper = new MediaBrowserConnection(context);
         mMediaBrowserHelper.registerCallback(new MediaBrowserListener());
-
-        Log.d("Detail", "onCreate has been called");
-
-        //
-
-        /*editor.putString("radio_name", radioTitle);
-        editor.commit();*/
 
         fab = view.findViewById(R.id.fab);
         fabDel = view.findViewById(R.id.fabDel);
@@ -138,8 +124,6 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
                 String[] mProjection = {Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID};
                 String mSelectionClause = Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID + " = ?";
                 String[] selectionArgs = {""};
@@ -171,8 +155,6 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
                 } else {
                     Snackbar.make(view, radioName + " is already in your favorite", Snackbar.LENGTH_LONG).show();
                     // show the del Fab button
-
-                    // hide the Add to fav fab button
                     fabDel.show();
                 }
 
@@ -184,8 +166,6 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
         fabDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
                 String[] mProjection = {Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID};
                 String mSelectionClause = Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID + " = ?";
                 String[] selectionArgs = {""};
@@ -216,9 +196,8 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
                     fabDel.hide();
                 } else {
                     Snackbar.make(view, radioName + " is already removed from your favorite", Snackbar.LENGTH_LONG).show();
-                    // show the del Fab button
-
-                    // hide the Add to fav fab button
+                    // show the show Fab button
+                    // hide the Add to del fab button
                     fab.show();
                     fabDel.hide();
                 }
@@ -274,7 +253,6 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
     public void onStop() {
         super.onStop();
         musicLibrary = null;
-        //mSeekBarAudio.disconnectController();
         mMediaBrowserHelper.onStop();
         Log.d("Detail", "onStop has been called");
 
@@ -284,18 +262,12 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
     public void onResume() {
         super.onResume();
         Log.d("DF", "onResume is call");
-        /*if(mIsPlaying){
-            mMediaControlsImage.setPressed(mIsPlaying);
-        }else {
-            mMediaControlsImage.setPressed(mIsPlaying);
-        }*/
     }
 
     @Override
     public void onPause() {
         super.onPause();
         Log.d("DF", "onPause is call");
-        //mSeekBarAudio.disconnectController();
         mMediaBrowserHelper.onStop();
     }
 
@@ -321,7 +293,6 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
                 case R.id.button_play:
                     if (mIsPlaying) {
                         mMediaBrowserHelper.getTransportControls().pause();
-                        //mMediaControlsImage.setSelected(true);
                     } else {
                         mMediaBrowserHelper.getTransportControls().play();
                     }
@@ -407,9 +378,6 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
                     .error(R.drawable.main_background)
                     .fit()
                     .into(mAlbumArt);
-            /*mAlbumArt.setImageBitmap(MusicLibrary.getAlbumBitmap(
-                    DetailActivity.this,
-                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)));*/
         }
 
         @Override
@@ -420,7 +388,6 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
         @Override
         public void onQueueChanged(List<MediaSessionCompat.QueueItem> queue) {
             super.onQueueChanged(queue);
-            //queue.get(queue.size());
         }
     }
 
@@ -452,6 +419,4 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
         outState.putString("radio_link", radioLink);
 
     }
-
-
 }

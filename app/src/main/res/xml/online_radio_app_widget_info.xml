@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:configure="za.co.samtakie.samtakieradio.OnlineRadioAppWidgetConfigureActivity"
+    android:configure="za.co.samtakie.samtakieradio.widget.OnlineRadioAppWidgetConfigureActivity"
     android:initialKeyguardLayout="@layout/online_radio_app_widget"
     android:initialLayout="@layout/online_radio_app_widget"
     android:minHeight="50dp"

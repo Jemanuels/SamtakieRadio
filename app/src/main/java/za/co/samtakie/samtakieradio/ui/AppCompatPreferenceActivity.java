@@ -1,4 +1,4 @@
-package za.co.samtakie.samtakieradio;
+package za.co.samtakie.samtakieradio.ui;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

@@ -21,8 +21,7 @@ import android.widget.Toast;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import za.co.samtakie.samtakieradio.R;
-import za.co.samtakie.samtakieradio.RadioConnection;
-import za.co.samtakie.samtakieradio.SettingsActivity;
+import za.co.samtakie.samtakieradio.utilities.RadioConnection;
 import za.co.samtakie.samtakieradio.provider.Contract;
 import za.co.samtakie.samtakieradio.sync.RadioSyncUtils;
 

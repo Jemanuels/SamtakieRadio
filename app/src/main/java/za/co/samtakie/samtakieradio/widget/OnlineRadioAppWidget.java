@@ -1,4 +1,4 @@
-package za.co.samtakie.samtakieradio;
+package za.co.samtakie.samtakieradio.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -13,6 +13,8 @@ import android.widget.RemoteViews;
 
 import com.squareup.picasso.Picasso;
 
+import za.co.samtakie.samtakieradio.R;
+import za.co.samtakie.samtakieradio.RadioOnline;
 import za.co.samtakie.samtakieradio.ui.DetailActivity;
 
 /**
@@ -21,23 +23,14 @@ import za.co.samtakie.samtakieradio.ui.DetailActivity;
  */
 public class OnlineRadioAppWidget extends AppWidgetProvider {
 
-
     private final static String ACTION_SIMPLEWIDGET = "ACTION_BROADCASTWIDGETSAMPLE";
     private static int counter = 0;
-
 
     private static CharSequence widgetText;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-
-
-
-
-
-
         RadioOnline radioData = OnlineRadioAppWidgetConfigureActivity.loadRadioNamePref(context, appWidgetId);
-
 
             widgetText = radioData.getAppwidget();
             String radioName = radioData.getRadioName();
@@ -45,11 +38,6 @@ public class OnlineRadioAppWidget extends AppWidgetProvider {
             int radioID = radioData.getRadioID();
             String radioLink = radioData.getRadioLink();
             final int[] appWidId = {appWidgetId};
-
-            //Log.d("Appwidget" , ""+widgetText);
-            //Log.d("Appwidget" , radioImage);
-            //Log.d("Appwidget" , radioName);
-
 
         // Construct the RemoteViews object
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.online_radio_app_widget);
@@ -74,20 +62,6 @@ public class OnlineRadioAppWidget extends AppWidgetProvider {
 
 
 
-        /*Intent mediaIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-
-        PendingIntent intent =  MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PLAY);
-        PendingIntent stopIntent =  MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PAUSE);
-
-        views.setOnClickPendingIntent(R.id.playBtn, intent);
-        views.setOnClickPendingIntent(R.id.stopBtn, stopIntent);*/
-
-        //MusicLibrary musicLibrary = new MusicLibrary("Djoga_"+1, "Radio 10", "Djoga 500", "Koyeba", "Basis", 100, TimeUnit.SECONDS,
-                //"http://s6.voscast.com:8150/;", R.drawable.album_jazz_blues, "album_jazz_blues");
-
-        //musicLibrary.createMediaMetadataCompat();
-
-
         Intent intent = new Intent(context, DetailActivity.class);
         if(radioLink != null) {
             intent.setData(Uri.parse(radioLink));
@@ -98,10 +72,6 @@ public class OnlineRadioAppWidget extends AppWidgetProvider {
         //PendingIntent pendingIntent =  MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PLAY);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.playBtn, pendingIntent);
-
-
-
-
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);

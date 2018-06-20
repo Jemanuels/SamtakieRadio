@@ -1,4 +1,4 @@
-package za.co.samtakie.samtakieradio;
+package za.co.samtakie.samtakieradio.utilities;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

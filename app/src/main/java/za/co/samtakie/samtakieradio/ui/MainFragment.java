@@ -23,10 +23,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import za.co.samtakie.samtakieradio.R;
-import za.co.samtakie.samtakieradio.SettingsActivity;
 import za.co.samtakie.samtakieradio.provider.Contract;
 import za.co.samtakie.samtakieradio.provider.RadioAdapter;
 
