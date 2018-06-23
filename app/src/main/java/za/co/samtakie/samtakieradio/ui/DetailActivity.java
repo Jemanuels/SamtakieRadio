@@ -13,46 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package za.co.samtakie.samtakieradio.ui;
 
-import android.content.res.Resources;
+
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
-import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import za.co.samtakie.samtakieradio.IOnFocusListenable;
 import za.co.samtakie.samtakieradio.R;
-import za.co.samtakie.samtakieradio.client.MediaBrowserHelper;
-import za.co.samtakie.samtakieradio.services.contentcatalogs.MusicLibrary;
 
+@SuppressWarnings("ConstantConditions")
 public class DetailActivity extends AppCompatActivity {
-
-    private ImageView mAlbumArt;
-    private TextView mTitleTextView;
-    private TextView mArtistTextView;
-    private ImageView mMediaControlsImage;
-    private MediaBrowserHelper mMediaBrowserHelper;
-    private boolean mIsPlaying;
 
     private String radioLink;
     private String radioTitle;
     private int radioID;
     private String radioImage;
 
-    private FloatingActionButton fab;
-    private FloatingActionButton fabDel;
-
-    DetailFragment detailFragment;
-
-    MusicLibrary musicLibrary;
+    private DetailFragment detailFragment;
 
     private static final String TAG_MY_FRAGMENT = "detailFragment";
 
@@ -64,15 +45,12 @@ public class DetailActivity extends AppCompatActivity {
 
          detailFragment = new DetailFragment();
 
-        /* Get the Bundle from the Widget and Parent App */
-        Bundle extras = getIntent().getExtras();
-
-
         if(savedInstanceState == null){
 
             // if the activity has been started set below variable by getting the data send via Intent
             radioTitle = getIntent().getStringExtra("radio_name");
             radioID = getIntent().getIntExtra("radioID", 0);
+            //noinspection ConstantConditions
             radioLink = getIntent().getData().toString();
             radioImage = getIntent().getStringExtra("radio_image");
 
@@ -104,7 +82,6 @@ public class DetailActivity extends AppCompatActivity {
                     .replace(R.id.fragment_details, detailFragment)
                     .commit();
         }
-
         // set the title of the activity linked to the selected online radio to be played
         String detailTitle = getString(R.string.title_activity_detail, radioTitle);
         setTitle(detailTitle);
@@ -122,49 +99,11 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        //mMediaBrowserHelper.onStart();
-
-
-        Log.d("Detail", "onStart has been called");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        /*musicLibrary = null;
-        mSeekBarAudio.disconnectController();
-        mMediaBrowserHelper.onStop();
-        Log.d("Detail", "onStop has been called");*/
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        /*mSeekBarAudio.disconnectController();
-        mMediaBrowserHelper.onStop();*/
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        if (mIsPlaying) {
-            //mMediaBrowserHelper.getTransportControls().stop();
-        }
-    }
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()){
             case android.R.id.home:
-                if (mIsPlaying) {
-                    //mMediaBrowserHelper.getTransportControls().stop();
-                }
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
         }
@@ -176,9 +115,9 @@ public class DetailActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        // This will fixed the play and pause button when the Deatil Activity gained focus
+        // This will fixed the play and pause button when the Detail Activity gained focus
         if( detailFragment instanceof IOnFocusListenable){
-            ((IOnFocusListenable) detailFragment).onWindowFocusChanged(hasFocus);
+            detailFragment.onWindowFocusChanged(hasFocus);
         }
     }
 }

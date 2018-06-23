@@ -1,3 +1,16 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.ui;
 
 import android.content.Context;
@@ -16,7 +29,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +36,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import za.co.samtakie.samtakieradio.R;
 import za.co.samtakie.samtakieradio.provider.Contract;
 import za.co.samtakie.samtakieradio.provider.RadioAdapter;
@@ -34,47 +48,21 @@ import za.co.samtakie.samtakieradio.provider.RadioAdapter;
  * Activities that contain this fragment must implement the
  * {@link MainFragment.RadioAdapterOnClickHandler} interface
  * to handle interaction events.
- * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+@SuppressWarnings({"unused", "FieldCanBeLocal"})
 public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+     private RadioAdapterOnClickHandler mListener;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private RadioAdapterOnClickHandler mListener;
-
-
-
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
     private RadioAdapter mAdapter;
     private static final int ID_RADIO_LOADER = 10; // loader to load all radio stations
-
     private static final int ID_RADIO_FAV_LOADER = 20;
-    SharedPreferences prefs;
-
-
-
-    private String urlRadioLink;
-    private int radioID;
-    private int radioImg;
-    Context context;
-    private static final String TAG = MainFragment.class.getSimpleName();
-
-    /* Static variable linked to the column index for passing into the Cursor to get the correct
-     *  column data */
-    public static final int INDEX_COLUMN_ONLINE_RADIO_ID = 0;
-    public static final int INDEX_COLUMN_ONLINE_RADIO_NAME = 1;
-    public static final int INDEX_COLUMN_ONLINE_RADIO_LINK = 2;
-    public static final int INDEX_COLUMN_ONLINE_RADIO_IMAGE = 3;
+    private SharedPreferences prefs;
+    private Context context;
 
     /* The columns of data that we are interested in displaying within our MainActivity's list of
-     * Radoi data */
+     * Radio data */
     public static final String[] MAIN_RADIO_PROJECTION = {
             Contract.RadioEntry._ID,
 
@@ -91,34 +79,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ItemFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance(String param1, String param2) {
-        MainFragment fragment = new MainFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
-
-
-
-
-        super.onActivityCreated(savedInstanceState);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,7 +88,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         // Load the loader for the data to be be loaded in the recyclerView
         //getLoaderManager().initLoader(ID_RADIO_LOADER, null, this);
         context = getContext();
-        Log.d("Main", "oncreate is being called");
 
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.registerOnSharedPreferenceChangeListener(this);
@@ -136,10 +95,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
         if(prefs.getString("example_list", "Default_List").equals("Default_List")){
             getLoaderManager().initLoader(ID_RADIO_LOADER, null, this);
-            Log.d("PrefMain", prefs.getString("example_list", "Default_List"));
         } else {
-
-            //Toast.makeText(this, "You have selected not to play the radio when on Mobile", Toast.LENGTH_LONG).show();
             getLoaderManager().initLoader(ID_RADIO_FAV_LOADER, null, this);
         }
 
@@ -147,34 +103,33 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        Log.d("PrefMain", "What sits in String s" + s);
-        if(s.equals("example_list")) {
-            Log.d("PrefMain", "View settings has been changed");
-            if (sharedPreferences.getString(s, "Default_List").equals("Default_List")) {
-                Log.d("PrefMain", "DEfault has been selected");
-                getLoaderManager().initLoader(ID_RADIO_LOADER, null, this);
-            } else {
-                Log.d("PrefMain", "Load the Fav loader: " + s);
-                getLoaderManager().initLoader(ID_RADIO_FAV_LOADER, null, this);
-            }
-        }else if(s.equals("example_switch")){
-            Log.d("PrefMain", "Switch has been selected: " + s);
-        }else if(s.equals("example_switch1")) {
-            Log.d("PrefMain", "Switch has been selected: " + s);
+        switch (s) {
+            case "example_list":
+                if (sharedPreferences.getString(s, "Default_List").equals("Default_List")) {
+                    getLoaderManager().initLoader(ID_RADIO_LOADER, null, this);
+                } else {
+                    getLoaderManager().initLoader(ID_RADIO_FAV_LOADER, null, this);
+                }
+                break;
+            case "example_switch":
+                // do nothing at the moment
+                break;
+            case "example_switch1":
+                 // do nothing at the moment
+                break;
+
+            default:
+                // Do nothing
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
-
-
-        mRecyclerView = (RecyclerView)  view.findViewById(R.id.recyclerView);
-
-
+        ButterKnife.bind(this, view);
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(context, numberOfColumns()));
 
@@ -187,6 +142,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         return view;
     }
 
+    @SuppressWarnings("ConstantConditions")
     private int numberOfColumns() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -231,7 +187,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         switch (id){
             case ID_RADIO_LOADER:
                 Uri radioQueryUri = Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO;
-                //displayToast("ID Radio Loader request");
                 String sortRadio = Contract.RadioEntry.COLUMN_ONLINE_RADIO_NAME + " ASC";
 
                 return new CursorLoader(
@@ -244,7 +199,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
             case ID_RADIO_FAV_LOADER:
                 Uri radioFavQueryUri = Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_FAV;
-                //displayToast("ID Radio Loader request for Fav list");
                 String sortRadioFav = Contract.RadioEntry.COLUMN_ONLINE_RADIO_NAME + " ASC";
 
                 return new CursorLoader(
@@ -262,18 +216,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-
-        // Todo: Add a loading indicator while the recycler view is loading the data
-        // Todo: hide the Loading indicator after the data has been successfully loaded in the recycler view
-
-
         mAdapter.swapCursor(data);
-
-
-
-        if(data.getCount() != 0){
-            // Todo: use this if block to show the list if the data object is greater than 0
-        }
     }
 
     @Override
@@ -317,14 +260,13 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         // check which menu item has been clicked and perform the switch case action
         switch (id){
             case R.id.action_settings:
-                //displayToast("List has been clicked!");
                 // Start the settings activity when this setting menu item has been clicked
                 Intent settingsIntent = new Intent(context, SettingsActivity.class);
                 startActivity(settingsIntent);
                 return true;
 
             case R.id.action_share:
-                String message = "I'm listening to Samtakie Radio";
+                String message = getString(R.string.share_message);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);

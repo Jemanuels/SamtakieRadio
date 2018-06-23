@@ -1,3 +1,16 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.services;
 
 
@@ -12,7 +25,6 @@ import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +35,10 @@ import za.co.samtakie.samtakieradio.services.players.MediaPlayerAdapter;
 
 public class MusicPlayerService extends MediaBrowserServiceCompat {
 
-    private static final String TAG = MusicPlayerService.class.getSimpleName();
-
     private MediaSessionCompat mSession;
     private PlayerAdapter mPlayback;
     private MediaNotificationManager mMediaNotificationManager;
-    private MediaSessionCallback mCallback;
     private boolean mServiceInStartedState;
-    PlaybackStateCompat playState;
 
     @Override
     public void onCreate() {
@@ -38,7 +46,7 @@ public class MusicPlayerService extends MediaBrowserServiceCompat {
 
         // Create a new MediaSession.
         mSession = new MediaSessionCompat(this, "MusicService");
-        mCallback = new MediaSessionCallback();
+        MediaSessionCallback mCallback = new MediaSessionCallback();
         mSession.setCallback(mCallback);
         mSession.setFlags(
                 MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
@@ -47,7 +55,6 @@ public class MusicPlayerService extends MediaBrowserServiceCompat {
         setSessionToken(mSession.getSessionToken());
 
         mMediaNotificationManager = new MediaNotificationManager(this);
-        //mMediaNotificationManager.getNotificationManager().notify(MediaNotificationManager.NOTIFICATION_ID, notification );
 
 
         mPlayback = new MediaPlayerAdapter(this, new MediaPlayerListener());
@@ -85,6 +92,7 @@ public class MusicPlayerService extends MediaBrowserServiceCompat {
     }
 
     // MediaSession Callback: Transport Controls -> MediaPlayerAdapter
+    @SuppressWarnings("WeakerAccess")
     public class MediaSessionCallback extends MediaSessionCompat.Callback {
         private final List<MediaSessionCompat.QueueItem> mPlaylist = new ArrayList<>();
         private int mQueueIndex = -1;
@@ -120,14 +128,10 @@ public class MusicPlayerService extends MediaBrowserServiceCompat {
             mPreparedMedia = MusicLibrary.getMetadata(MusicPlayerService.this, mediaId);
             mSession.setMetadata(mPreparedMedia);
 
-
             if (!mSession.isActive()) {
                 mSession.setActive(true);
             }
 
-            for(int i = 0; i < mPlaylist.size(); i++){
-                Log.d("MPA ", "The data on " + i + " " + mPlaylist.get(i));
-            }
         }
 
         @Override
@@ -211,6 +215,7 @@ public class MusicPlayerService extends MediaBrowserServiceCompat {
             }
         }
 
+        @SuppressWarnings("unused")
         class ServiceManager {
 
             private void moveServiceToStartedState(PlaybackStateCompat state) {

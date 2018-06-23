@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:background="@color/colorPrimary"
-    android:padding="@dimen/widget_margin">
+    android:padding="@dimen/widget_margin"
+    tools:ignore="Overdraw">
 
     <ImageView
         android:id="@+id/radioImage"
@@ -13,6 +14,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:padding="8dp"
+        android:contentDescription="@string/radio_station_img_description"
         android:src="@drawable/ic_radio" />
 
     <TextView
@@ -33,6 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1"
+        android:contentDescription="@string/image_play_button_description"
         android:src="@drawable/hover" />
 
 </LinearLayout>

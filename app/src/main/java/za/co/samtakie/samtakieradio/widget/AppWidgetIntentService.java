@@ -20,15 +20,13 @@ import za.co.samtakie.samtakieradio.R;
  * helper methods.
  */
 public class AppWidgetIntentService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
+
     private static final String ACTION_UPDATE_WIDGET = "za.co.samtakie.samtakieradio.action.UPDATE_WIDGET";
-    private static final String ACTION_BAZ = "za.co.samtakie.samtakieradio.action.BAZ";
+    @SuppressWarnings("FieldCanBeLocal")
     private final String CHANNEL_ID = "channel_1";
 
-    // TODO: Rename parameters
+
     private static final String EXTRA_APPWIDGETID = "za.co.samtakie.samtakieradio.extra.APPWIDGETID";
-    private static final String EXTRA_PARAM2 = "za.co.samtakie.samtakieradio.extra.PARAM2";
 
     public AppWidgetIntentService() {
         super("AppWidgetIntentService");
@@ -70,6 +68,7 @@ public class AppWidgetIntentService extends IntentService {
             // Register the channel with the system
             NotificationManager notificationManager = (NotificationManager) this
                     .getSystemService(Context.NOTIFICATION_SERVICE);
+            assert notificationManager != null;
             notificationManager.createNotificationChannel(channel);
 
 
@@ -83,20 +82,6 @@ public class AppWidgetIntentService extends IntentService {
         }
     }
 
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, AppWidgetIntentService.class);
-        intent.setAction(ACTION_BAZ);
-        //intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -105,16 +90,9 @@ public class AppWidgetIntentService extends IntentService {
             if (ACTION_UPDATE_WIDGET.equals(action)) {
                 Log.d("onHandleIntent", " has been called");
                 final int appwidgetId = intent.getIntExtra(EXTRA_APPWIDGETID, 0);
-                //final String param2 = intent.getStringExtra(EXTRA_PARAM2);
+
                 handleActionUpdateWidget(appwidgetId);
 
-
-
-
-            } else if (ACTION_BAZ.equals(action)) {
-                //final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                //handleActionBaz(param1, param2);
             }
         }
     }
@@ -133,18 +111,6 @@ public class AppWidgetIntentService extends IntentService {
         OnlineRadioAppWidget.updateAppWidget(this, appWidgetManager, AppwidgetId);
 
 
-
-
-        //
-
     }
 
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionBaz(String param1, String param2) {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
 }

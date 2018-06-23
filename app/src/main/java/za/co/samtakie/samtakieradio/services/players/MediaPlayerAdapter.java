@@ -23,13 +23,10 @@ import za.co.samtakie.samtakieradio.services.PlayerAdapter;
 import za.co.samtakie.samtakieradio.services.contentcatalogs.MusicLibrary;
 import za.co.samtakie.samtakieradio.ui.DetailActivity;
 
+@SuppressWarnings("CanBeFinal")
 public final class MediaPlayerAdapter extends PlayerAdapter {
 
-    private static final int BUFFER_SEGMENT_SIZE = 64 * 1024;
-    private static final int BUFFER_SEGMENT_COUNT = 256;
-
     private final Context mContext;
-    private MediaPlayer mMediaPlayer;
     private String mFilename;
     private PlaybackInfoListener mPlaybackInfoListener;
     private MediaMetadataCompat mCurrentMedia;
@@ -38,7 +35,6 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
 
     private SimpleExoPlayer player;
     private boolean playWhenReady;
-    private MediaSource mediaSource;
 
     // Work-around for a MediaPlayer bug related to the behavior of MediaPlayer.seekTo()
     // while not playing.
@@ -82,10 +78,10 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
 
     }
 
-    @Override
-    public void playFromUri(MediaMetadataCompat metadata) {
-
-    }
+//    @Override
+//    public void playFromUri(MediaMetadataCompat metadata) {
+//
+//    }
 
     @Override
     public MediaMetadataCompat getCurrentMedia() {
@@ -113,6 +109,7 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
 
         initializeMediaPlayer();
 
+        MediaSource mediaSource;
         try {
             //AssetFileDescriptor assetFileDescriptor = mContext.getAssets().openFd(mFilename);
             //mMediaPlayer.setDataSource(mContext, Uri.parse(mFilename));

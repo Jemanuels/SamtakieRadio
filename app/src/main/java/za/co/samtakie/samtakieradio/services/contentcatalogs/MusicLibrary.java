@@ -1,13 +1,24 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.services.contentcatalogs;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,23 +28,23 @@ import java.util.concurrent.TimeUnit;
 
 import za.co.samtakie.samtakieradio.BuildConfig;
 
+@SuppressWarnings("SameReturnValue")
 public class MusicLibrary {
 
     private static final TreeMap<String, MediaMetadataCompat> music = new TreeMap<>();
     private static final HashMap<String, Integer> albumRes = new HashMap<>();
     private static final HashMap<String, String> musicFileName = new HashMap<>();
-    private static String radioTitle;
 
-    String mediaId;
-    String title;
-    String artist;
-    String album;
-    String genre;
-    long duration;
-    TimeUnit durationUnit;
-    String musicLinkname;
-    int albumArtResId;
-    String albumArtResName;
+    private final String mediaId;
+    private final String title;
+    private final String artist;
+    private final String album;
+    private final String genre;
+    private final long duration;
+    private final TimeUnit durationUnit;
+    private final String musicLinkName;
+    private final int albumArtResId;
+    private final String albumArtResName;
 
     public MusicLibrary(String mediaId,
                  String title,
@@ -42,7 +53,7 @@ public class MusicLibrary {
                  String genre,
                  long duration,
                  TimeUnit durationUnit,
-                 String musicLinkname,
+                 String musicLinkName,
                  int albumArtResId,
                  String albumArtResName){
         this.mediaId = mediaId;
@@ -52,26 +63,12 @@ public class MusicLibrary {
         this.genre = genre;
         this.duration = duration;
         this.durationUnit = durationUnit;
-        this.musicLinkname = musicLinkname;
+        this.musicLinkName = musicLinkName;
         this.albumArtResId = albumArtResId;
         this.albumArtResName = albumArtResName;
 
 
     }
-    public static SharedPreferences getSharedPreferences (Context ctxt) {
-        return ctxt.getSharedPreferences("Djoga500", 0);
-    }
-
-
-    private  static String getRadioTitle() {
-        return MusicLibrary.radioTitle;
-    }
-
-    public void setRadioTitle(String radioName) {
-        MusicLibrary.radioTitle = radioName;
-    }
-
-
 
     public static String getRoot() {
         return "root";
@@ -81,8 +78,6 @@ public class MusicLibrary {
         return ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
                 BuildConfig.APPLICATION_ID + "/drawable/" + albumArtResName;
     }
-
-
 
     public static String getMusicFilename(String mediaId) {
         return musicFileName.containsKey(mediaId) ? musicFileName.get(mediaId) : null;
@@ -134,6 +129,7 @@ public class MusicLibrary {
 
 
     public void createMediaMetadataCompat() {
+        //noinspection ConstantConditions
         if(music != null){
             music.clear();
         }
@@ -155,6 +151,6 @@ public class MusicLibrary {
                         .putString(MediaMetadataCompat.METADATA_KEY_TITLE, title)
                         .build());
         albumRes.put(mediaId, albumArtResId);
-        musicFileName.put(mediaId, musicLinkname);
+        musicFileName.put(mediaId, musicLinkName);
     }
 }

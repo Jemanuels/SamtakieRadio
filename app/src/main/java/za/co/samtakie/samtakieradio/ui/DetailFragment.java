@@ -1,6 +1,20 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.ui;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,7 +31,6 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +43,8 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import za.co.samtakie.samtakieradio.IOnFocusListenable;
 import za.co.samtakie.samtakieradio.R;
 import za.co.samtakie.samtakieradio.client.MediaBrowserHelper;
@@ -40,18 +55,20 @@ import za.co.samtakie.samtakieradio.services.contentcatalogs.MusicLibrary;
 /**
  * A simple {@link Fragment} subclass.
  */
+@SuppressWarnings("unused")
 public class DetailFragment extends Fragment implements IOnFocusListenable{
 
     private int radioID;
-    private int adapterPosition;
     private String radioLink;
     private String radioName;
     private String radioImage;
 
-    private ImageView mAlbumArt;
-    private TextView mTitleTextView;
-    private TextView mArtistTextView;
-    private ImageButton mMediaControlsImage;
+    @BindView(R.id.album_art) ImageView mAlbumArt;
+    @BindView(R.id.song_title) TextView mTitleTextView;
+    @BindView(R.id.song_artist) TextView mArtistTextView;
+    @BindView(R.id.button_play) ImageButton mMediaControlsImage;
+
+
     private MediaBrowserHelper mMediaBrowserHelper;
     private boolean mIsPlaying;
 
@@ -59,7 +76,6 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
     private FloatingActionButton fabDel;
     private Context context;
     MusicLibrary musicLibrary;
-    boolean updatePlayImage;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -73,7 +89,6 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
             radioName = savedInstanceState.getString("radio_name");
             radioImage = savedInstanceState.getString("radio_image");
             radioLink = savedInstanceState.getString("radio_link");
-            Log.d("radioImage", radioImage);
         }
     }
 
@@ -88,31 +103,24 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
             radioImage = savedInstanceState.getString("radio_image");
             radioLink = savedInstanceState.getString("radio_link");
         }
-
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("Recycle")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
-
+        ButterKnife.bind(this, view);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-
-        mTitleTextView = view.findViewById(R.id.song_title);
-        mArtistTextView = view.findViewById(R.id.song_artist);
-        mAlbumArt = view.findViewById(R.id.album_art);
-        mMediaControlsImage = (ImageButton) view.findViewById(R.id.button_play);
 
         final ClickListener clickListener = new ClickListener();
         mMediaControlsImage.setOnClickListener(clickListener);
 
-        //musicLibrary.setRadioTitle(radioTitle);
-        musicLibrary = new MusicLibrary("Djoga_"+radioID, radioName, "Brought to you by Samtakie", "Online Radio Samtakie", "Radio", 100, TimeUnit.SECONDS,
-                radioLink, R.drawable.album_jazz_blues, radioImage);
+        musicLibrary = new MusicLibrary("Djoga_"+radioID, radioName, getString(R.string.artist_text), getString(R.string.album_string), getString(R.string.genre_text), 100, TimeUnit.SECONDS,
+                radioLink, R.drawable.main_background, radioImage);
 
         musicLibrary.createMediaMetadataCompat();
         mMediaBrowserHelper = new MediaBrowserConnection(context);
@@ -122,6 +130,7 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
         fabDel = view.findViewById(R.id.fabDel);
 
         fab.setOnClickListener(new View.OnClickListener() {
+            @SuppressWarnings("ConstantConditions")
             @Override
             public void onClick(View view) {
                 String[] mProjection = {Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID};
@@ -129,7 +138,7 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
                 String[] selectionArgs = {""};
                 selectionArgs[0] = String.valueOf(radioID);
 
-                // Insert data to the online radio fav table via a contentresolver
+                // Insert data to the online radio fav table via a content resolver
                 ContentValues contentValues = new ContentValues();
 
                 contentValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID, radioID);
@@ -137,7 +146,7 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
                 contentValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_LINK, radioLink);
                 contentValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_IMAGE, radioImage);
 
-                Cursor cursor = getActivity().getContentResolver().query(
+                 Cursor cursor = getActivity().getContentResolver().query(
                         Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_FAV,
                         mProjection,
                         mSelectionClause,
@@ -145,15 +154,15 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
                         null);
 
                 // check and make sure the online radio doesn't exits in the fav table
-                // if it is, ignore adding the data and igform the user.
+                // if it is, ignore adding the data and inform the user.
                 assert cursor != null;
                 if(cursor.getCount() == 0){
                     getActivity().getContentResolver().insert(Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_FAV, contentValues);
-                    Snackbar.make(view, radioName + " has been added to your favorite", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, radioName + " " + getString(R.string.add_fav_text), Snackbar.LENGTH_LONG).show();
                     fab.hide();
                     fabDel.show();
                 } else {
-                    Snackbar.make(view, radioName + " is already in your favorite", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, radioName + " " + getString(R.string.already_add_fav_text), Snackbar.LENGTH_LONG).show();
                     // show the del Fab button
                     fabDel.show();
                 }
@@ -162,8 +171,9 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
             }
         });
 
-        // Fab button click for removing the online radio from the Favo list
+        // Fab button click for removing the online radio from the Favorite list
         fabDel.setOnClickListener(new View.OnClickListener() {
+            @SuppressWarnings("ConstantConditions")
             @Override
             public void onClick(View view) {
                 String[] mProjection = {Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID};
@@ -171,7 +181,7 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
                 String[] selectionArgs = {""};
                 selectionArgs[0] = String.valueOf(radioID);
 
-                // Insert data to the online radio fav table via a contentresolver
+                // Insert data to the online radio fav table via a content resolver
                 ContentValues contentValues = new ContentValues();
 
                 contentValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID, radioID);
@@ -187,15 +197,15 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
                         null);
 
                 // check and make sure the online radio doesn't exits in the fav table
-                // if it is, ignore adding the data and igform the user.
+                // if it is, ignore adding the data and inform the user.
                 assert cursor != null;
                 if(cursor.getCount() != 0){
                     getActivity().getContentResolver().delete(Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_FAV, mSelectionClause, selectionArgs);
-                    Snackbar.make(view, radioName + " has been removed from your favorite", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, radioName + " " + getString(R.string.remove_fav_text), Snackbar.LENGTH_LONG).show();
                     fab.show();
                     fabDel.hide();
                 } else {
-                    Snackbar.make(view, radioName + " is already removed from your favorite", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, radioName + " " + getString(R.string.already_remove_fav_text), Snackbar.LENGTH_LONG).show();
                     // show the show Fab button
                     // hide the Add to del fab button
                     fab.show();
@@ -213,16 +223,15 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
         return view;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void radioInFavorite(int id){
         Contract.RadioEntry.buildRadioFavItemUri(1);
-
-
         String[] mProjection = {Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID};
         String mSelectionClause = Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID + " = ?";
         String[] selectionArgs = {""};
         selectionArgs[0] = String.valueOf(id);
 
-        Cursor cursor = getActivity().getContentResolver().query(
+        @SuppressLint("Recycle") Cursor cursor = getActivity().getContentResolver().query(
                 Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_FAV,
                 mProjection,
                 mSelectionClause,
@@ -254,23 +263,16 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
         super.onStop();
         musicLibrary = null;
         mMediaBrowserHelper.onStop();
-        Log.d("Detail", "onStop has been called");
-
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("DF", "onResume is call");
-    }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d("DF", "onPause is call");
         mMediaBrowserHelper.onStop();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
        if(mIsPlaying){
@@ -318,7 +320,6 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
 
         @Override
         protected void onConnected(@NonNull MediaControllerCompat mediaController) {
-            //mSeekBarAudio.setMediaController(mediaController);
 
         }
 
@@ -348,6 +349,7 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
      * are added or removed from the queue. We don't do this here in order to keep the UI
      * simple.
      */
+    @SuppressWarnings("EmptyMethod")
     private class MediaBrowserListener extends MediaControllerCompat.Callback {
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat playbackState) {
@@ -370,16 +372,16 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
             String radioImgLink = mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI);
             String samtakieUrl = "http://www.samtakie.co.za/img/samtakie_radio/";
             String imgRadioUrl = samtakieUrl + radioImgLink +".jpg";
-            Log.d("Album", imgRadioUrl);
             // Use Picasso
             Picasso picasso = Picasso.get();
             picasso.load(imgRadioUrl)
                     .placeholder(R.drawable.main_background)
-                    .error(R.drawable.main_background)
+                    .error(R.drawable.ic_error_200dp)
                     .fit()
                     .into(mAlbumArt);
         }
 
+        @SuppressWarnings("EmptyMethod")
         @Override
         public void onSessionDestroyed() {
             super.onSessionDestroyed();

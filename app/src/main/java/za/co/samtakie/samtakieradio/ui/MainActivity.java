@@ -1,3 +1,16 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.ui;
 
 
@@ -7,6 +20,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,10 +35,12 @@ import android.widget.Toast;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import za.co.samtakie.samtakieradio.R;
+import za.co.samtakie.samtakieradio.UpdateOnlineRadio;
 import za.co.samtakie.samtakieradio.utilities.RadioConnection;
 import za.co.samtakie.samtakieradio.provider.Contract;
 import za.co.samtakie.samtakieradio.sync.RadioSyncUtils;
 
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class MainActivity extends AppCompatActivity implements MainFragment.RadioAdapterOnClickHandler {
 
     /* Initialize a constant of Type String to hold the Activity class name */
@@ -36,10 +52,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
     // Check in place for showing the Alert dialog one in the app lifecycle
     private boolean showDialog = true;
 
+    private Snackbar mySnackBar;
     private Toolbar toolbar;
 
     /* Static variable linked to the column index for passing into the Cursor to get the correct
-    *  column data  0 represent the first column and n represent the last column */
+     *  column data  0 represent the first column and n represent the last column */
     public static final int INDEX_COLUMN_ONLINE_RADIO_ID = 0;
     public static final int INDEX_COLUMN_ONLINE_RADIO_NAME = 1;
     public static final int INDEX_COLUMN_ONLINE_RADIO_LINK = 2;
@@ -57,40 +74,44 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
         setContentView(R.layout.activity_main);
 
         /* Subscribe to the susanie topics, this will make sure that all message sent with this topic
-        * will be received by any user using this app */
+         * will be received by any user using this app */
         FirebaseMessaging.getInstance().subscribeToTopic("susanie");
+
+        mySnackBar = Snackbar.make(findViewById(R.id.myLayout), R.string.update_data, Snackbar.LENGTH_SHORT);
 
         /* Create a new object of MainFragment*/
         MainFragment mainFragment = new MainFragment();
 
         /* set tabletSize to true if the device is a tablet size.
-        * The layout file in values-large or sw600dp will be used which is true */
+         * The layout file in values-large or sw600dp will be used which is true */
         tabletSize = getResources().getBoolean(R.bool.screen_large);
 
         /* If the tabletSize is true and the savedInstance is equal to null, add the mainFragment object
-        * to the fragmentManager and use layout fragment_main_master and commit
-        * This means that Main and Detail will be loaded in one activity */
-        if(tabletSize){
-            if(savedInstanceState == null) {
+         * to the fragmentManager and use layout fragment_main_master and commit
+         * This means that Main and Detail will be loaded in one activity */
+        if (tabletSize) {
+            if (savedInstanceState == null) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .add(R.id.fragment_main_master, mainFragment, TAG_MAIN_FRAGMENT)
                         .commit();
             } else {
                 /* else reload the mainFragment using the tag name */
+                //noinspection UnusedAssignment
                 mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(TAG_MAIN_FRAGMENT);
             }
 
         } else {
             /* Else if not a tablet size load fragment_main for phone devices, and if the savedInstanceState
              * is null add the mainFragment object to the fragmentManager and commit */
-            if(savedInstanceState == null) {
+            if (savedInstanceState == null) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_main, mainFragment, TAG_MAIN_FRAGMENT)
                         .commit();
             } else {
                 /* Else reload the mainFragment using the tag name*/
+                //noinspection UnusedAssignment
                 mainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(TAG_MAIN_FRAGMENT);
 
             }
@@ -113,12 +134,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
         isConnectedMobile = RadioConnection.haveNetworkConnectionMobile(this);
 
 
-
         boolean mobileData = prefs.getBoolean("example_switch1", false);
         //prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.d("Switch", ""+prefs.getBoolean("example_switch", false));
-        Log.d("View", ""+prefs.getString("example_list", "0"));
-        if(mobileData) {
+        Log.d("Switch", "" + prefs.getBoolean("example_switch", false));
+        Log.d("View", "" + prefs.getString("example_list", "0"));
+        if (mobileData) {
             if (isConnectedMobile) {
                 // Get the value of MobileData in the preference settings
                 //Boolean mobileDataOn = prefs.getBoolean("example_switch1", false);
@@ -131,9 +151,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
                 } else {
                     builder = new AlertDialog.Builder(this);
                 }
-                if(showDialog) {
-                    builder.setTitle("Your are connected via Mobile Data")
-                            .setMessage("You can change the setting for the mobile data in the setting " +
+                if (showDialog) {
+                    builder.setTitle(R.string.title_alert_mobile_data)
+                            .setMessage(getString(R.string.text_message_alert_mobile_data) +
                                     " screen. " + msgMobileDataOn)
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -146,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
                                     MainActivity.this.finish();
                                 }
                             })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setIcon(R.drawable.ic_sync)
                             .show();
                     showDialog = false;
                 }
@@ -154,8 +174,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
         }
 
         // Show the user a Toast message if the user is connected via the WiFi
-        if(isConnectedWifi){
-            Toast.makeText(this, "You are connected via Wifi", Toast.LENGTH_LONG).show();
+        if (isConnectedWifi) {
+            Toast.makeText(this, R.string.text_wifi, Toast.LENGTH_LONG).show();
         }
 
         // Set the toolbar to be loaded.
@@ -163,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
         //Set the toolbar to act as the ActionBar for this Activity window.
         setSupportActionBar(toolbar);
     }
-
 
 
     @Override
@@ -180,20 +199,24 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
         int id = item.getItemId();
 
         // check which menu item has been clicked and perform the switch case action
-        switch (id){
+        switch (id) {
             case R.id.action_settings:
-                displayToast("List has been clicked!");
+
                 // Start the settings activity when this setting menu item has been clicked
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 return true;
 
             case R.id.action_share:
-                String message = "I'm listening to Samtakie Radio";
+                String message = getString(R.string.share_message);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);
                 startActivity(share);
+                return true;
+
+            case R.id.action_refresh:
+                new UpdateOnlineRadio(this);
                 return true;
 
             case R.id.action_news:
@@ -201,8 +224,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
                 startActivity(news);
                 return true;
 
-                default:
-                    // Do nothing for the time being
+            default:
+                // Do nothing for the time being
 
         }
         return super.onOptionsItemSelected(item);
@@ -210,26 +233,26 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
 
     /**
      * This function will show the Toast message on screen
+     *
      * @param message Hold the text of the message to be shown
      */
-    public void displayToast(String message){
+    public void displayToast(String message) {
         //Todo: Add Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show(); to @displayToast method
         Log.d(TAG, message);
     }
 
-    public void startDetailActivity(View view,int radioID,  int contentPosition, String radioLink, String radioName, String radioImage) {
-        if(tabletSize){
-            Log.d(TAG, "Activity has been loaded in a Tablet");
-            //if(savedInstanceState == null) {
-                DetailFragment detailFragment = new DetailFragment();
+    public void startDetailActivity(View view, int radioID, int contentPosition, String radioLink, String radioName, String radioImage) {
+        if (tabletSize) {
+
+            DetailFragment detailFragment = new DetailFragment();
             detailFragment.setRadioID(radioID);
             detailFragment.setRadioImage(radioImage);
             detailFragment.setRadioLink(radioLink);
             detailFragment.setRadioName(radioName);
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_detail_child, detailFragment)
-                        .commit();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_detail_child, detailFragment)
+                    .commit();
 
         } else {
 
@@ -246,25 +269,15 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
 
     @Override
     public void radioItemOnClickHandler(int radioID, View view, int adapterPosition, String radioLink, String radioName, String radioImage) {
-        displayToast("Get the view ID clicked " + view.getId());
-        displayToast("Radio ID is " + radioID);
-        displayToast("The Radio Link is " + radioLink);
-        displayToast("The Radio name is " + radioName);
-        displayToast("The radioImage url is " + radioImage);
-        //Todo: call the startDetailActivity with all the parameters for the MusicLibrary class.
         startDetailActivity(view, radioID, adapterPosition, radioLink, radioName, radioImage);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if(!showDialog){
-            showDialog = false;
+        if (!showDialog) {
+            showDialog = true;
         }
 
     }
@@ -272,14 +285,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
     @Override
     protected void onResume() {
         super.onResume();
-        if(showDialog){
+        if (showDialog) {
             showDialog = false;
         }
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }

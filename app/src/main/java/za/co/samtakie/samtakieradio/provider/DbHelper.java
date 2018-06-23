@@ -1,9 +1,23 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.provider;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+@SuppressWarnings("unused")
 public class DbHelper extends SQLiteOpenHelper {
 
     /* Set the database name. */
@@ -67,8 +81,9 @@ public class DbHelper extends SQLiteOpenHelper {
          * At the moment no update is being carried out. Check web page for a best practice
          * on using onUpgrade: https://thebhwgroup.com/blog/how-android-sqlite-onupgrade */
 
+        //noinspection StatementWithEmptyBody
         if(oldVersion < 6){
-            //sqLiteDatabase.execSQL(SQL_CREATE_ONLINE_RADIO_NEWS_TABLE);
+            //Add updated code here to be execute in case of an upgrade in the database
         }
     }
 }

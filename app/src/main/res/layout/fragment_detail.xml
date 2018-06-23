@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/album_art"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="295dp"
         android:layout_marginBottom="8dp"
         android:scaleType="fitCenter"
@@ -18,7 +18,7 @@
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.51"
-        tools:background="@drawable/album_jazz_blues"
+        tools:background="@drawable/main_background"
         tools:ignore="ContentDescription" />
 
     <TextView

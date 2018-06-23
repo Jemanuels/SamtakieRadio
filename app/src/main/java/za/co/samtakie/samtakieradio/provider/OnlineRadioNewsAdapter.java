@@ -1,29 +1,37 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.provider;
 
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import za.co.samtakie.samtakieradio.R;
-import za.co.samtakie.samtakieradio.ui.MainActivity;
 import za.co.samtakie.samtakieradio.ui.News;
 
 public class OnlineRadioNewsAdapter extends RecyclerView.Adapter<OnlineRadioNewsAdapter.NewsRadioHolder> {
 
     private Cursor mData;
-    private static SimpleDateFormat sDateFormat = new SimpleDateFormat("dd MMM");
-
+    private static final SimpleDateFormat sDateFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
     private static final long MINUTE_MILLIS = 1000 * 60;
     private static final long HOUR_MILLIS = 60 * MINUTE_MILLIS;
     private static final long DAY_MILLIS = 24 * HOUR_MILLIS;
@@ -34,9 +42,7 @@ public class OnlineRadioNewsAdapter extends RecyclerView.Adapter<OnlineRadioNews
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_news, parent, false);
 
-        NewsRadioHolder newsRadioHolder = new NewsRadioHolder(view);
-
-        return newsRadioHolder;
+        return new NewsRadioHolder(view);
     }
 
     @Override
@@ -49,7 +55,7 @@ public class OnlineRadioNewsAdapter extends RecyclerView.Adapter<OnlineRadioNews
         long dateMillis = mData.getLong(News.COL_NUM_DATE);
         String message = mData.getString(News.COL_NUM_MESSAGE);
         String IDnews = String.valueOf(mData.getInt(News.COL_NUM_ID));
-        String date = "";
+        String date;
         long now = System.currentTimeMillis();
 
         // Change how the date is displayed depending on whether it was written in the last minute,
@@ -90,6 +96,7 @@ public class OnlineRadioNewsAdapter extends RecyclerView.Adapter<OnlineRadioNews
         notifyDataSetChanged();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public class NewsRadioHolder extends RecyclerView.ViewHolder{
 
         final TextView authorTextView;
@@ -100,10 +107,10 @@ public class OnlineRadioNewsAdapter extends RecyclerView.Adapter<OnlineRadioNews
 
         public NewsRadioHolder(View itemView) {
             super(itemView);
-            authorTextView = (TextView) itemView.findViewById(R.id.author_text_view);
-            messageTextView = (TextView) itemView.findViewById(R.id.message_text_view);
-            dateTextView = (TextView) itemView.findViewById(R.id.date_text_view);
-            newsID = (TextView) itemView.findViewById(R.id.news_id);
+            authorTextView = itemView.findViewById(R.id.author_text_view);
+            messageTextView = itemView.findViewById(R.id.message_text_view);
+            dateTextView = itemView.findViewById(R.id.date_text_view);
+            newsID = itemView.findViewById(R.id.news_id);
         }
     }
 }

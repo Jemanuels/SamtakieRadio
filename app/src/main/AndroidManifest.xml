@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="za.co.samtakie.samtakieradio">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,12 +12,22 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="@xml/backup_descriptor">
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http"
+                    android:host="www.samtakie.co.za"
+                    android:pathPrefix="/samtakieradio"  />
             </intent-filter>
         </activity>
         <activity
@@ -32,7 +43,8 @@
         <provider
             android:name=".provider.RadioContentProvider"
             android:authorities="za.co.samtakie.samtakieradio"
-            android:exported="true" />
+            android:exported="true"
+            tools:ignore="ExportedContentProvider" />
 
         <service
             android:name=".sync.RadioSyncIntentService"
@@ -40,7 +52,8 @@
         <service
             android:name=".services.MusicPlayerService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
@@ -73,14 +86,17 @@
 
         <activity
             android:name=".ui.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:theme="@style/DetailTheme" />
 
-        <service android:name=".fcm.OnlineRadioFirebaseInstanceIdService">
+        <service android:name=".fcm.OnlineRadioFirebaseInstanceIdService"
+            tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".fcm.OnlineRadioFirebaseMessageService">
+        <service android:name=".fcm.OnlineRadioFirebaseMessageService"
+            tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -95,5 +111,4 @@
                 android:value=".ui.MainActivity" />
         </activity>
     </application>
-
 </manifest>

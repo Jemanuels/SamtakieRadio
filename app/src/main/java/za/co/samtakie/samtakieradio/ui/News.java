@@ -1,5 +1,19 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
@@ -13,7 +27,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -22,6 +35,7 @@ import za.co.samtakie.samtakieradio.R;
 import za.co.samtakie.samtakieradio.provider.Contract;
 import za.co.samtakie.samtakieradio.provider.OnlineRadioNewsAdapter;
 
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class News extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     public static final int COL_NUM_ID= 0;
@@ -29,21 +43,18 @@ public class News extends AppCompatActivity implements LoaderManager.LoaderCallb
     public static final int COL_NUM_DATE = 2;
     public static final int COL_NUM_MESSAGE = 3;
 
-    static final String[] MESSAGES_PROJECTION = {
+    private static final String[] MESSAGES_PROJECTION = {
             Contract.RadioEntry._ID,
             Contract.RadioEntry.COLUMN_ONLINE_RADIO_NEWS_TITLE,
             Contract.RadioEntry.COLUMN_ONLINE_RADIO_NEWS_DATE,
             Contract.RadioEntry.COLUMN_ONLINE_RADIO_NEWS_MESSAGE
     };
 
-    private static String LOG_TAG = News.class.getSimpleName();
     private static final int LOADER_ID_MESSAGES = 0;
 
-    RecyclerView mRecyclerView;
-    LinearLayoutManager mLayoutManager;
-    OnlineRadioNewsAdapter mAdapter;
-    private ItemTouchHelper itemTouchHelper;
-    private Cursor mData;
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLayoutManager;
+    private OnlineRadioNewsAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +62,7 @@ public class News extends AppCompatActivity implements LoaderManager.LoaderCallb
         setContentView(R.layout.activity_news);
 
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.news_recycler_view);
+        mRecyclerView = findViewById(R.id.news_recycler_view);
 
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -73,9 +84,8 @@ public class News extends AppCompatActivity implements LoaderManager.LoaderCallb
 
         int swipeDirs = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
 
-        itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN | ItemTouchHelper.UP, swipeDirs)
-        {
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN | ItemTouchHelper.UP, swipeDirs) {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -93,11 +103,7 @@ public class News extends AppCompatActivity implements LoaderManager.LoaderCallb
 
                 selectionArgs[0] = news_id;
 
-                Log.d(LOG_TAG, "The item position is: " + news_id);
-
-
-
-                Cursor cursor = getContentResolver().query(
+                @SuppressLint("Recycle") Cursor cursor = getContentResolver().query(
                         Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_NEWS,
                         mProjection,
                         mSelectionClause,
@@ -105,24 +111,11 @@ public class News extends AppCompatActivity implements LoaderManager.LoaderCallb
                         null);
 
                 // check and make sure the online radio doesn't exits in the fav table
-                // if it is, ignore adding the data and igform the user.
+                // if it is, ignore adding the data and inform the user.
                 assert cursor != null;
-                if(cursor.getCount() != 0){
+                if (cursor.getCount() != 0) {
                     getContentResolver().delete(Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_NEWS, mSelectionClause, selectionArgs);
-                    //Snackbar.make(News.view, radioName + " has been removed from your favorite", Snackbar.LENGTH_LONG).show();
-                    //fab.show();
-                    //fabDel.hide();
-                    Log.d(LOG_TAG, "Data has been removed");
-                } else {
-                    //Snackbar.make(view, radioName + " is already removed from your favorite", Snackbar.LENGTH_LONG).show();
-                    // show the del Fab button
-
-                    // hide the Add to fav fab button
-                    //fab.show();
-                    //fabDel.hide();
-                    Log.d(LOG_TAG, "Data can't be removed");
                 }
-
 
                 mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
             }
@@ -149,7 +142,6 @@ public class News extends AppCompatActivity implements LoaderManager.LoaderCallb
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        mData = data;
         mAdapter.swapCursor(data);
     }
 
@@ -184,7 +176,7 @@ public class News extends AppCompatActivity implements LoaderManager.LoaderCallb
                 return true;
 
             case R.id.action_share:
-                String message = "I'm listening to Samtakie Radio";
+                String message = getString(R.string.share_message);
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message);

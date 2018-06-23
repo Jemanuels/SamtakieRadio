@@ -1,3 +1,16 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.provider;
 
 import android.content.Context;
@@ -67,6 +80,7 @@ public class RadioWidgetAdapter extends RecyclerView.Adapter<RadioWidgetAdapter.
         int layoutIdForListItem = R.layout.list_item;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         boolean shouldAttachToParent = false;
+        //noinspection ConstantConditions
         View view = inflater.inflate(layoutIdForListItem, parent, shouldAttachToParent);
         return new RadioViewHolder(view);
     }
@@ -100,7 +114,7 @@ public class RadioWidgetAdapter extends RecyclerView.Adapter<RadioWidgetAdapter.
                                             //Toast.makeText(mContext, "Null swatch :(", Toast.LENGTH_LONG).show();
                                             holder.mRadioNameText.setBackgroundColor(textSwatch.getRgb());
                                             holder.mRadioNameText.setTextColor(textSwatch.getBodyTextColor());
-                                            return;
+                                            //return;
                                         }
                                     }
                                 });
@@ -133,16 +147,16 @@ public class RadioWidgetAdapter extends RecyclerView.Adapter<RadioWidgetAdapter.
     }
 
 
+    @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
     public class RadioViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mRadioNameText;
         private ImageView radioImageView;
-        private TextView subHeadText;
 
         public RadioViewHolder(View itemView) {
             super(itemView);
-            mRadioNameText = (TextView)itemView.findViewById(R.id.radioName);
-            radioImageView = (ImageView) itemView.findViewById(R.id.radioImage);
+            mRadioNameText = itemView.findViewById(R.id.radioName);
+            radioImageView = itemView.findViewById(R.id.radioImage);
 
             itemView.setOnClickListener(this);
         }

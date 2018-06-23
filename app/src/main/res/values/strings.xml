@@ -4,24 +4,13 @@
     <string name="title_activity_detail">Radio %1$s is Playing</string>
 
     <string name="action_settings">Settings</string>
-    <string name="action_list">List</string>
-    <string name="action_favorites">Favorites</string>
     <string name="action_share">Share</string>
 
-    <string name="button">button 34</string>
-    <string name="centering">Center</string>
-    <string name="centered_button">center button</string>
-
-    <string name="channel_name">Djoga500</string>
-    <string name="label_stop">Stop</string>
     <string name="label_pause">Pause</string>
     <string name="label_play">Play</string>
     <string name="label_play_pause">Play and pause toggle</string>
     <string name="appwidget_text">Samtakie Radio Online</string>
-    <string name="configure">Configure</string>
-    <string name="add_widget">Add widget</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="cancel">Cancel</string>
     <string name="title_activity_settings">Settings</string>
 
@@ -48,48 +37,35 @@
         <item>Default_List</item>
     </string-array>
 
-    <!--settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
 
-    <string name="pref_title_vibrate">Vibrate</string>
     <string name="action_sync">Refresh Data</string>
     <string name="action_message">Message</string>
 
     <!-- String resources for OnlineRadioFirebaseMessageService -->
-    <string name="channelid_cloud_message">za.co.samtakie.samtakieradio.adminmessage</string>
     <string name="cloud_message">message</string>
     <string name="cloud_title">title</string>
     <string name="cloud_date">date</string>
     <string name="createChannel_name">Admin</string>
     <string name="createChannel_description">Message from the Admin</string>
+    <string name="brought_to_you">Brought to you by: Spokie</string>
+
+    <string name="artist_text">Brought to you by Samtakie</string>
+    <string name="album_string">Online Radio Samtakie</string>
+    <string name="genre_text">Radio</string>
+    <string name="add_fav_text">has been added to your favorite</string>
+    <string name="already_add_fav_text">is already in your favorite</string>
+
+    <string name="remove_fav_text">has been removed from your favorite</string>
+    <string name="already_remove_fav_text">is already removed from your favorite</string>
+    <string name="radio_station_img_description">Radio station image</string>
+    <string name="image_play_button_description">image for the play button</string>
+    <string name="admin_image_description">admin image</string>
+    <string name="update_data">Update Data</string>
+    <string name="title_alert_mobile_data">Your are connected via Mobile Data</string>
+    <string name="text_message_alert_mobile_data">You can change the setting for the mobile data in the setting</string>
+    <string name="text_wifi">You are connected via Wifi</string>
+    <string name="share_message">I\'m listening to Samtakie Radio</string>
+    <string name="update_title">Update Online Radio Data</string>
+    <string name="update_message">Do you want to update the online Radio Data?</string>
 </resources>

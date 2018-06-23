@@ -1,7 +1,21 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.fcm;
 
 
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,12 +29,11 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import za.co.samtakie.samtakieradio.R;
@@ -29,9 +42,9 @@ import za.co.samtakie.samtakieradio.ui.News;
 
 public class OnlineRadioFirebaseMessageService extends FirebaseMessagingService {
 
-    private final String CHANNEL_ID = getString(R.string.channelid_cloud_message);
+    private static final String CHANNEL_ID = "za.co.samtakie.samtakieradio.adminmessage";
 
-    private final int NOTIFICATION_MAX_CHARACTERS = getResources().getInteger(R.integer.notification_max_characters);
+    private static final int NOTIFICATION_MAX_CHARACTERS = 30;
 
     /***
      * Called when message is received.
@@ -80,7 +93,7 @@ public class OnlineRadioFirebaseMessageService extends FirebaseMessagingService 
 
         // Database operations should not be done on the main thread
         // For this we have created a AsyncTask to process it in the background
-        AsyncTask<Void, Void, Void> insertNewsTask = new AsyncTask<Void, Void, Void>() {
+        @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, Void> insertNewsTask = new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... voids) {
@@ -153,9 +166,10 @@ public class OnlineRadioFirebaseMessageService extends FirebaseMessagingService 
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.exo_notification_small_icon)
+                .setSmallIcon(R.drawable.ic_online_notification)
                 .setContentTitle(title)
                 .setContentText(message)
+                .setColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
@@ -165,9 +179,11 @@ public class OnlineRadioFirebaseMessageService extends FirebaseMessagingService 
 
         // Create the Channel if Android version is O or earlier
         if(isAndroidOOrHigher()) {
+            assert notificationManager != null;
             createChannel(notificationManager);
         }
 
+        assert notificationManager != null;
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 }

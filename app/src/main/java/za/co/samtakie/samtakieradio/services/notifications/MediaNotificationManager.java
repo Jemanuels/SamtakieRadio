@@ -1,3 +1,16 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.services.notifications;
 
 import android.app.Notification;
@@ -42,8 +55,6 @@ public class MediaNotificationManager {
 
     private final NotificationCompat.Action mPlayAction;
     private final NotificationCompat.Action mPauseAction;
-    /*private final NotificationCompat.Action mNextAction;
-    private final NotificationCompat.Action mPrevAction;*/
     private final NotificationManager mNotificationManager;
 
     public MediaNotificationManager(MusicPlayerService service) {
@@ -67,6 +78,7 @@ public class MediaNotificationManager {
                                 mService,
                                 PlaybackStateCompat.ACTION_PAUSE));
 
+        assert mNotificationManager != null;
         mNotificationManager.cancelAll();
     }
 
@@ -88,6 +100,7 @@ public class MediaNotificationManager {
         return builder.build();
     }
 
+    @SuppressWarnings("unused")
     private NotificationCompat.Builder buildNotification(@NonNull PlaybackStateCompat state,
                                                          MediaSessionCompat.Token token,
                                                          boolean isPlaying,

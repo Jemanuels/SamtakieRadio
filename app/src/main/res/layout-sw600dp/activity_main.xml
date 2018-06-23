@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="za.co.samtakie.samtakieradio.ui.MainActivity"
     tools:layout_editor_absoluteX="0dp"
+    android:id="@+id/myLayout"
     tools:layout_editor_absoluteY="89dp">
     <!-- LinearLayout that arranges all three Android-Me body part images vertically -->
 
@@ -19,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/main_background"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="?android:attr/colorPrimary"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="exitUntilCollapsed|scroll"
@@ -28,7 +29,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="?android:attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -71,8 +72,6 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="8dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="8dp"
             android:layout_marginStart="0dp"
             android:background="@color/colorPrimaryDark"
             android:paddingEnd="64dp"

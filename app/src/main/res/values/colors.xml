@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
 
     <color name="colorAccent">#c53d13</color>
     <color name="colorPrimary">#ff5722</color>
@@ -7,7 +7,7 @@
     <color name="colorPrimaryLight">#ff8a50</color>
     <color name="colorSecondary">#ff6e40</color>
     <color name="colorSecondaryLight">#ffa06d</color>
-    <color name="colorSecondaryDark">#c53d13</color>
+    <color name="colorSecondaryDark" tools:ignore="UnusedResources">#c53d13</color>
     <color name="colorPrimaryText">#fafafa</color>
     <color name="colorSecondaryText">#fbe9e7</color>
 

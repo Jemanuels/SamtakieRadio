@@ -6,8 +6,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="8dp"
     card_view:cardCornerRadius="2dp"
+    android:foreground="?android:attr/selectableItemBackground"
     android:id="@+id/cv_radio"
-    card_view:cardElevation="10dp">
+
+
+    android:clickable="true"
+    android:focusable="true"
+    android:elevation="2dp"
+
+    card_view:cardElevation="8dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -16,8 +23,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"
-            android:src="@drawable/main_background"
+            tools:src="@drawable/main_background"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/radio_station_img_description"
             android:id="@+id/radioImage" />
 
         <TextView
@@ -33,10 +41,10 @@
             android:id="@+id/radioName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
+            android:gravity="start"
             android:padding="8dp"
             android:layout_below="@id/radioImage"
-            android:text="Brought to you by: Spokie"
+            android:text="@string/brought_to_you"
             android:textColor="?android:textColorSecondary"
             style="@style/TextAppearance.AppCompat.Subhead"/>
 </RelativeLayout>

@@ -1,8 +1,20 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.utilities;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,6 +22,7 @@ import org.json.JSONObject;
 
 import za.co.samtakie.samtakieradio.provider.Contract;
 
+@SuppressWarnings("WeakerAccess")
 public class OpenRadioJsonUtils {
 
     public static final String RADIO_ID = "ID";
@@ -17,6 +30,7 @@ public class OpenRadioJsonUtils {
     public static final String RADIO_LINK = "radio_link";
     public static final String RADIO_IMAGE = "radio_image";
 
+    @SuppressWarnings("unused")
     public static ContentValues[] getSimpleRadioStringFromJson(Context context, String jsonResponse) throws JSONException{
         JSONObject radioJsonObject = new JSONObject(jsonResponse);
         JSONArray radioArray = radioJsonObject.getJSONArray("online_radio");
@@ -40,11 +54,6 @@ public class OpenRadioJsonUtils {
             radioLink = jsonObject.getString(RADIO_LINK);
             radioImage = jsonObject.getString(RADIO_IMAGE);
 
-            Log.d("Json Util ", "ID is " + String.valueOf(radioID));
-            Log.d("Json Util ", "Name is " + radioName);
-            Log.d("Json Util ", "Link is " + radioLink);
-            Log.d("Json Util ", "Image is " + radioImage + "\n");
-
             radioValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID, radioID);
             radioValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_NAME, radioName);
             radioValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_LINK, radioLink);
@@ -52,7 +61,6 @@ public class OpenRadioJsonUtils {
 
             radioContentValues[i] = radioValues;
 
-            Log.d("Radio Values", radioValues.toString());
         }
 
         return radioContentValues;

@@ -23,16 +23,14 @@ import za.co.samtakie.samtakieradio.ui.DetailActivity;
  */
 public class OnlineRadioAppWidget extends AppWidgetProvider {
 
-    private final static String ACTION_SIMPLEWIDGET = "ACTION_BROADCASTWIDGETSAMPLE";
-    private static int counter = 0;
-
-    private static CharSequence widgetText;
+    //private final static String ACTION_SIMPLEWIDGET = "ACTION_BROADCASTWIDGETSAMPLE";
+    //private static int counter = 0;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         RadioOnline radioData = OnlineRadioAppWidgetConfigureActivity.loadRadioNamePref(context, appWidgetId);
 
-            widgetText = radioData.getAppwidget();
+        CharSequence widgetText = radioData.getAppwidget();
             String radioName = radioData.getRadioName();
             String radioImage = radioData.getRadioImage();
             int radioID = radioData.getRadioID();
@@ -55,7 +53,6 @@ public class OnlineRadioAppWidget extends AppWidgetProvider {
             public void run() {
 
                 picasso.load(imgRadioUrl)
-                        //.transform( new GrayscaleTransformation(picasso))
                         .into(views, R.id.radioImage, appWidId);
             }
         });
@@ -67,7 +64,7 @@ public class OnlineRadioAppWidget extends AppWidgetProvider {
             intent.setData(Uri.parse(radioLink));
         }
         intent.putExtra("radio_name", radioName); // add the radio name in the intent
-        intent.putExtra("radio_image", radioImage); // add the raoio image in the intent
+        intent.putExtra("radio_image", radioImage); // add the radio image in the intent
         intent.putExtra("radioID", radioID); // add the radio ID in the intent
         //PendingIntent pendingIntent =  MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PLAY);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

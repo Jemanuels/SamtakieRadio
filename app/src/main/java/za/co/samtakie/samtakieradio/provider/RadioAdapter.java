@@ -1,3 +1,16 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.provider;
 
 import android.content.Context;
@@ -9,18 +22,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Cache;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-
-import java.util.concurrent.Executors;
 
 import za.co.samtakie.samtakieradio.ui.MainActivity;
 import za.co.samtakie.samtakieradio.R;
@@ -51,10 +59,6 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHol
         this.mClickHandler = mClickHandler;
     }
 
-    /*public interface RadioAdapterOnClickHandler {
-        void radioItemOnClickHandler(int radioID, View view, int adapterPosition, String radioLink, String radioName, String radioImage);
-    }*/
-
     /***
      * This gets called when each ViewHolder is created. This happens when the RecyclerView
      * is laid out. Enough ViewHolders will be created to fill the screen and allow for scrolling.
@@ -72,6 +76,7 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHol
         int layoutIdForListItem = R.layout.list_item;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         boolean shouldAttachToParent = false;
+        //noinspection ConstantConditions
         View view = inflater.inflate(layoutIdForListItem, parent, shouldAttachToParent);
         return new RadioViewHolder(view);
     }
@@ -89,7 +94,8 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHol
                 .load(Uri.parse(imgRadioUrl))
                 .resize(200, 200)
                 .onlyScaleDown()
-                .placeholder(R.drawable.main_background)
+                .placeholder(R.mipmap.ic_launcher_foreground)
+                .error(R.drawable.ic_error_200dp)
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -107,7 +113,7 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHol
                                             holder.mRadioNameText.setBackgroundColor(textSwatch.getRgb());
                                             holder.crRadio.setCardBackgroundColor(textSwatch.getRgb());
                                             holder.mRadioNameText.setTextColor(textSwatch.getBodyTextColor());
-                                            return;
+                                            //return;
                                         }
                                     }
                                 });
@@ -115,11 +121,13 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHol
 
                     @Override
                     public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                        holder.radioImageView.setImageDrawable(errorDrawable);
 
                     }
 
                     @Override
                     public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        holder.radioImageView.setImageDrawable(placeHolderDrawable);
 
                     }
 
@@ -140,6 +148,7 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHol
     }
 
 
+    @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
     public class RadioViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mRadioNameText;
@@ -148,9 +157,9 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioViewHol
 
         public RadioViewHolder(View itemView) {
             super(itemView);
-            mRadioNameText = (TextView)itemView.findViewById(R.id.radioName);
-            radioImageView = (ImageView) itemView.findViewById(R.id.radioImage);
-            crRadio = (CardView) itemView.findViewById(R.id.cv_radio);
+            mRadioNameText = itemView.findViewById(R.id.radioName);
+            radioImageView = itemView.findViewById(R.id.radioImage);
+            crRadio = itemView.findViewById(R.id.cv_radio);
             itemView.setOnClickListener(this);
         }
 

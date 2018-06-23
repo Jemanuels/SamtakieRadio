@@ -1,3 +1,16 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.provider;
 
 import android.net.Uri;
@@ -10,13 +23,14 @@ import android.provider.BaseColumns;
  * It also includes a @RadioEntry class
  */
 
+@SuppressWarnings("ALL")
 public class Contract {
 
     /* The authority, which is how the code knows which Content Provider to access */
     public static final String AUTHORITY = "za.co.samtakie.samtakieradio";
 
     /*The base content URI = "content://" + <authority> */
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
     /* Define the possible paths for accessing data in this contract
      * This is the path for the radio directory. */
@@ -69,9 +83,7 @@ public class Contract {
         // column online radio name
         public static final String COLUMN_ONLINE_RADIO_IMAGE = "radio_image";
 
-        /**
-         * This part holds the static variable for the online radio news table
-         */
+
 
         // Table name for the online radio news table
         public static final String TABLE_NAME_NEWS = "online_radio_news";
@@ -85,12 +97,9 @@ public class Contract {
         // column online radio news message column
         public static final String COLUMN_ONLINE_RADIO_NEWS_MESSAGE = "online_radio_news_message";
 
-        /**
-         * End of the online radio static variables
-         */
 
         /***
-         * This static method huilds an Uri that adds the radio id to the end of the radio content Uri path.
+         * This static method builds an Uri that adds the radio id to the end of the radio content Uri path.
          * This is used to query details about a single recipe entry by id.
          * @param radioID this is the id of the radio in the Database
          * @return the Uri link for a single item

@@ -1,12 +1,21 @@
+/*Copyright [2018] [Jurgen Emanuels]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 package za.co.samtakie.samtakieradio.utilities;
 
 import android.net.Uri;
-import android.net.UrlQuerySanitizer;
-import android.util.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
@@ -20,9 +29,6 @@ import javax.net.ssl.HttpsURLConnection;
 public class NetworkUtils {
 
     private NetworkUtils(){}
-
-    // Get the name of the current class and assign it to the TAG constant
-    private static final String TAG = NetworkUtils.class.getSimpleName();
 
     // Set the url for downloading the data and assign it to constant DYNAMIC_RADIO_URL
     private static final String DYNAMIC_RADIO_URL = "https://www.samtakie.co.za/samtakie_json.php";
@@ -41,7 +47,6 @@ public class NetworkUtils {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        logMessage(TAG, "The url string " + url);
         return url;
     }
 
@@ -62,14 +67,5 @@ public class NetworkUtils {
         } finally {
             urlConnection.disconnect();
         }
-    }
-
-    /**
-     * Helper function for printing data in the Logcat
-     * @param classname  - the Class name
-     * @param message    - The message to show
-     */
-    public static void logMessage(String classname, String message){
-        Log.d(classname, message);
     }
 }
