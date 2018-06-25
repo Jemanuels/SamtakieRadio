@@ -33,7 +33,6 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -46,8 +45,6 @@ import za.co.samtakie.samtakieradio.services.contentcatalogs.MusicLibrary;
 public class MediaNotificationManager {
 
     public static final int NOTIFICATION_ID = 412;
-
-    private static final String TAG = MediaNotificationManager.class.getSimpleName();
     private static final String CHANNEL_ID = "za.co.samtakie.samtakieradio.channel";
     private static final int REQUEST_CODE = 501;
 

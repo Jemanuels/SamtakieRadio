@@ -8,7 +8,6 @@ import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 
 import za.co.samtakie.samtakieradio.R;
 
