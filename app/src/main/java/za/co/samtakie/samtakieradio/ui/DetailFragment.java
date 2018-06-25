@@ -45,6 +45,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import za.co.samtakie.samtakieradio.IOnFocusListenable;
 import za.co.samtakie.samtakieradio.R;
 import za.co.samtakie.samtakieradio.client.MediaBrowserHelper;
@@ -67,19 +68,14 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
     @BindView(R.id.song_title) TextView mTitleTextView;
     @BindView(R.id.song_artist) TextView mArtistTextView;
     @BindView(R.id.button_play) ImageButton mMediaControlsImage;
-
+    @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.fabDel) FloatingActionButton fabDel;
 
     private MediaBrowserHelper mMediaBrowserHelper;
     private boolean mIsPlaying;
 
-    private FloatingActionButton fab;
-    private FloatingActionButton fabDel;
     private Context context;
     MusicLibrary musicLibrary;
-
-    public DetailFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -126,56 +122,17 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
         mMediaBrowserHelper = new MediaBrowserConnection(context);
         mMediaBrowserHelper.registerCallback(new MediaBrowserListener());
 
-        fab = view.findViewById(R.id.fab);
-        fabDel = view.findViewById(R.id.fabDel);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @SuppressWarnings("ConstantConditions")
-            @Override
-            public void onClick(View view) {
-                String[] mProjection = {Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID};
-                String mSelectionClause = Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID + " = ?";
-                String[] selectionArgs = {""};
-                selectionArgs[0] = String.valueOf(radioID);
-
-                // Insert data to the online radio fav table via a content resolver
-                ContentValues contentValues = new ContentValues();
-
-                contentValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID, radioID);
-                contentValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_NAME, radioName);
-                contentValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_LINK, radioLink);
-                contentValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_IMAGE, radioImage);
-
-                 Cursor cursor = getActivity().getContentResolver().query(
-                        Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_FAV,
-                        mProjection,
-                        mSelectionClause,
-                        selectionArgs,
-                        null);
-
-                // check and make sure the online radio doesn't exits in the fav table
-                // if it is, ignore adding the data and inform the user.
-                assert cursor != null;
-                if(cursor.getCount() == 0){
-                    getActivity().getContentResolver().insert(Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_FAV, contentValues);
-                    Snackbar.make(view, radioName + " " + getString(R.string.add_fav_text), Snackbar.LENGTH_LONG).show();
-                    fab.hide();
-                    fabDel.show();
-                } else {
-                    Snackbar.make(view, radioName + " " + getString(R.string.already_add_fav_text), Snackbar.LENGTH_LONG).show();
-                    // show the del Fab button
-                    fabDel.show();
-                }
+        // Show the Add and the Del Fab button if the Radio Online data exist in the Favorite table
+        radioInFavorite(radioID);
 
 
-            }
-        });
+        return view;
+    }
 
-        // Fab button click for removing the online radio from the Favorite list
-        fabDel.setOnClickListener(new View.OnClickListener() {
-            @SuppressWarnings("ConstantConditions")
-            @Override
-            public void onClick(View view) {
+
+    @OnClick(R.id.fab)
+    public void addToFavorite(View view){
+
                 String[] mProjection = {Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID};
                 String mSelectionClause = Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID + " = ?";
                 String[] selectionArgs = {""};
@@ -199,28 +156,56 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
                 // check and make sure the online radio doesn't exits in the fav table
                 // if it is, ignore adding the data and inform the user.
                 assert cursor != null;
-                if(cursor.getCount() != 0){
-                    getActivity().getContentResolver().delete(Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_FAV, mSelectionClause, selectionArgs);
-                    Snackbar.make(view, radioName + " " + getString(R.string.remove_fav_text), Snackbar.LENGTH_LONG).show();
-                    fab.show();
-                    fabDel.hide();
+                if(cursor.getCount() == 0){
+                    getActivity().getContentResolver().insert(Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_FAV, contentValues);
+                    Snackbar.make(view, radioName + " " + getString(R.string.add_fav_text), Snackbar.LENGTH_LONG).show();
+                    fab.hide();
+                    fabDel.show();
                 } else {
-                    Snackbar.make(view, radioName + " " + getString(R.string.already_remove_fav_text), Snackbar.LENGTH_LONG).show();
-                    // show the show Fab button
-                    // hide the Add to del fab button
-                    fab.show();
-                    fabDel.hide();
+                    Snackbar.make(view, radioName + " " + getString(R.string.already_add_fav_text), Snackbar.LENGTH_LONG).show();
+                    // show the del Fab button
+                    fabDel.show();
                 }
 
+    }
 
-            }
-        });
+    @OnClick(R.id.fabDel)
+    public void removeFromFavorite(View view){
+        String[] mProjection = {Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID};
+        String mSelectionClause = Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID + " = ?";
+        String[] selectionArgs = {""};
+        selectionArgs[0] = String.valueOf(radioID);
 
-        // Show the Add and the Del Fab button if the Radio Online data exist in the Favorite table
-        radioInFavorite(radioID);
+        // Insert data to the online radio fav table via a content resolver
+        ContentValues contentValues = new ContentValues();
 
+        contentValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID, radioID);
+        contentValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_NAME, radioName);
+        contentValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_LINK, radioLink);
+        contentValues.put(Contract.RadioEntry.COLUMN_ONLINE_RADIO_IMAGE, radioImage);
 
-        return view;
+        Cursor cursor = getActivity().getContentResolver().query(
+                Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_FAV,
+                mProjection,
+                mSelectionClause,
+                selectionArgs,
+                null);
+
+        // check and make sure the online radio doesn't exits in the fav table
+        // if it is, ignore adding the data and inform the user.
+        assert cursor != null;
+        if(cursor.getCount() != 0){
+            getActivity().getContentResolver().delete(Contract.RadioEntry.CONTENT_URI_ONLINE_RADIO_FAV, mSelectionClause, selectionArgs);
+            Snackbar.make(view, radioName + " " + getString(R.string.remove_fav_text), Snackbar.LENGTH_LONG).show();
+            fab.show();
+            fabDel.hide();
+        } else {
+            Snackbar.make(view, radioName + " " + getString(R.string.already_remove_fav_text), Snackbar.LENGTH_LONG).show();
+            // show the show Fab button
+            // hide the Add to del fab button
+            fab.show();
+            fabDel.hide();
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -379,12 +364,6 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
                     .error(R.drawable.ic_error_200dp)
                     .fit()
                     .into(mAlbumArt);
-        }
-
-        @SuppressWarnings("EmptyMethod")
-        @Override
-        public void onSessionDestroyed() {
-            super.onSessionDestroyed();
         }
 
         @Override

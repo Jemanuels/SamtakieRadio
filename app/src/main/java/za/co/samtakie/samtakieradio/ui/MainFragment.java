@@ -72,21 +72,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             Contract.RadioEntry.COLUMN_ONLINE_RADIO_ID
     };
 
-    //private static final int ID_RADIO_LOADER = 37;
-
-
-    public MainFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Build the url to get all the radio data in the database
         Contract.RadioEntry.buildRadioAll();
 
-        // Load the loader for the data to be be loaded in the recyclerView
-        //getLoaderManager().initLoader(ID_RADIO_LOADER, null, this);
         context = getContext();
 
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
