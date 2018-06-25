@@ -17,6 +17,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import za.co.samtakie.samtakieradio.R;
+
 @SuppressWarnings({"unused", "EmptyMethod"})
 public class OnlineRadioFirebaseInstanceIdService extends FirebaseInstanceIdService {
 
@@ -34,7 +36,7 @@ public class OnlineRadioFirebaseInstanceIdService extends FirebaseInstanceIdServ
         // Instance ID token to your app server.
         sendRegistrationToServer(refreshedToken);
         // subscribe to topic susanie
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/susanie");
+        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.topic_name));
     }
 
     /***

@@ -68,4 +68,8 @@
     <string name="share_message">I\'m listening to Samtakie Radio</string>
     <string name="update_title">Update Online Radio Data</string>
     <string name="update_message">Do you want to update the online Radio Data?</string>
+    <string name="add_to_favorite">Add to Favorite</string>
+    <string name="remove_from_favorite">Remove from Favorite</string>
+    <string name="widget_play_text">Play online radio:</string>
+    <string name="topic_name">/topics/susanie</string>
 </resources>

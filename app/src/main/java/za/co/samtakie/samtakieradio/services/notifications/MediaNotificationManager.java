@@ -82,9 +82,7 @@ public class MediaNotificationManager {
         mNotificationManager.cancelAll();
     }
 
-    public void onDestroy() {
-        Log.d(TAG, "onDestroy: ");
-    }
+    public void onDestroy() {}
 
     public NotificationManager getNotificationManager() {
         return mNotificationManager;
@@ -115,13 +113,7 @@ public class MediaNotificationManager {
         String samtakieUrl = "http://www.samtakie.co.za/img/samtakie_radio/";
         String imgRadioUrl = samtakieUrl + radioImgLink +".jpg";
 
-        //Bitmap. bitmap = MusicLibrary.getAlbumBitmap(mService, description.getMediaId());
-
        final NotificationCompat.Builder builder = new NotificationCompat.Builder(mService, CHANNEL_ID);
-
-        /*Target mTarget = new Target() {
-
-        };*/
 
         builder.setLargeIcon(MusicLibrary.getAlbumBitmap(mService, description.getMediaId()));
 
@@ -170,18 +162,7 @@ public class MediaNotificationManager {
                 // Show controls on lock screen even when user hides sensitive content.
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
-
-        /*// If skip to next action is enabled.
-        if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS) != 0) {
-            builder.addAction(mPrevAction);
-        }*/
-
         builder.addAction(isPlaying ? mPauseAction : mPlayAction);
-
-       /* // If skip to prev action is enabled.
-        if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_NEXT) != 0) {
-            builder.addAction(mNextAction);
-        }*/
 
         return builder;
     }

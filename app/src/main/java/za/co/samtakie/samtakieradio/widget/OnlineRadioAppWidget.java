@@ -39,7 +39,7 @@ public class OnlineRadioAppWidget extends AppWidgetProvider {
 
         // Construct the RemoteViews object
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.online_radio_app_widget);
-        views.setTextViewText(R.id.appwidget_text,"Play online radio: " + widgetText);
+        views.setTextViewText(R.id.appwidget_text,context.getString(R.string.widget_play_text) + widgetText);
 
         /* Load the image using Picasso */
         final Picasso picasso = Picasso.get();
@@ -78,8 +78,6 @@ public class OnlineRadioAppWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-
-        Log.d("Appwidget", "The onUpdate has been called");
         for (int appWidgetId : appWidgetIds) {
             AppWidgetIntentService.startActionUpdateWidget(context,appWidgetId );
         }

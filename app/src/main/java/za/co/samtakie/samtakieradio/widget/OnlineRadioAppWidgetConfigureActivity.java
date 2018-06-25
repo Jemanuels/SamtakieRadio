@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import za.co.samtakie.samtakieradio.R;
@@ -82,13 +81,6 @@ public class OnlineRadioAppWidgetConfigureActivity extends AppCompatActivity imp
 
         return new RadioOnline(appWidget,radioName, radioImage, radioID, radioLink);
 
-
-        //if (radioData != null) {
-            //Log.d("LoadRadioNamePref" , "radioData is not Null");
-            //return radioData;
-        //} else {
-        //    return null;
-        //}
     }
 
     static void deleteTitlePref(Context context, int appWidgetId) {
@@ -100,7 +92,6 @@ public class OnlineRadioAppWidgetConfigureActivity extends AppCompatActivity imp
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        Log.d("ConfigurationActivity", "onCreate has been called");
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED);
@@ -130,13 +121,6 @@ public class OnlineRadioAppWidgetConfigureActivity extends AppCompatActivity imp
 
     @Override
     public void radioItemOnClickHandler(int radioID, View view, int adapterPosition, String radioLink, String radioName, String radioImage) {
-        displayToast("Get the view ID clicked " + view.getId());
-        displayToast("Radio ID is " + radioID);
-        displayToast("The Radio Link is " + radioLink);
-        displayToast("The Radio name is " + radioName);
-        displayToast("The radioImage url is " + radioImage);
-        //Todo: Create the appwidget and set the default data to be viewed every time the widget is being clicked
-
         final Context context = OnlineRadioAppWidgetConfigureActivity.this;
 
         // When the button is clicked, store the string locally
@@ -156,8 +140,4 @@ public class OnlineRadioAppWidgetConfigureActivity extends AppCompatActivity imp
         }
     }
 
-    public void displayToast(String message){
-        //Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        Log.d(TAG, message);
-    }
 }

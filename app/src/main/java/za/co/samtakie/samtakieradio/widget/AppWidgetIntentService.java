@@ -60,8 +60,8 @@ public class AppWidgetIntentService extends IntentService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel, but only on API 26+ because
             // the NotificationChannel class is new and not in the support library
-            CharSequence name = "Samtakie Baking";
-            String description = "Samtakie Recipe";
+            CharSequence name = "Samtakie";
+            String description = "Samtakie Online Radio";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
@@ -75,7 +75,7 @@ public class AppWidgetIntentService extends IntentService {
             Notification.Builder mBuilder =
                     new Notification.Builder(this, CHANNEL_ID)
                             .setSmallIcon(R.mipmap.ic_launcher)
-                            .setContentTitle("Baking Notification");
+                            .setContentTitle("Online radio Notification");
 
             notificationManager.notify(1, mBuilder.build());
             startForeground(1,mBuilder.build());
@@ -88,9 +88,7 @@ public class AppWidgetIntentService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_UPDATE_WIDGET.equals(action)) {
-                Log.d("onHandleIntent", " has been called");
                 final int appwidgetId = intent.getIntExtra(EXTRA_APPWIDGETID, 0);
-
                 handleActionUpdateWidget(appwidgetId);
 
             }

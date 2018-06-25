@@ -237,14 +237,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         void radioItemOnClickHandler(int radioID, View view, int adapterPosition, String radioLink, String radioName, String radioImage);
     }
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // inflate the menu layout
-        getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
-
-
-        return true;
-    }*/
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

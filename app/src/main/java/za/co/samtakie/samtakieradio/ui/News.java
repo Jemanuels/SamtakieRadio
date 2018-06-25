@@ -169,7 +169,6 @@ public class News extends AppCompatActivity implements LoaderManager.LoaderCallb
         // check which menu item has been clicked and perform the switch case action
         switch (id){
             case R.id.action_settings:
-                //displayToast("List has been clicked!");
                 // Start the settings activity when this setting menu item has been clicked
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
