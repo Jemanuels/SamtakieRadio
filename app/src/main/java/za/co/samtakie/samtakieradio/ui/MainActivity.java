@@ -32,6 +32,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import za.co.samtakie.samtakieradio.R;
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
 
     private Snackbar mySnackBar;
     private Toolbar toolbar;
+
+    private AdView mAdView;
 
     /* Static variable linked to the column index for passing into the Cursor to get the correct
      *  column data  0 represent the first column and n represent the last column */
@@ -182,6 +186,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
         toolbar = findViewById(R.id.toolbar);
         //Set the toolbar to act as the ActionBar for this Activity window.
         setSupportActionBar(toolbar);
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
 
@@ -222,6 +230,21 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Radi
             case R.id.action_news:
                 Intent news = new Intent(this, News.class);
                 startActivity(news);
+                return true;
+
+            case R.id.action_privacy_policy:
+                Intent privacyPolicy = new Intent(this, privacy_policy.class);
+
+                privacyPolicy.putExtra("url", "http://www.samtakie.co.za/onlineradio/privacy_policy.html");
+                privacyPolicy.putExtra("title", "Privacy Policy");
+                startActivity(privacyPolicy);
+                return true;
+
+            case R.id.action_terms_conditions:
+                Intent termsAndConditions = new Intent(this, privacy_policy.class);
+                termsAndConditions.putExtra("url", "http://www.samtakie.co.za/onlineradio/terms_and_conditions.html");
+                termsAndConditions.putExtra("title", "Terms and Conditions");
+                startActivity(termsAndConditions);
                 return true;
 
             default:

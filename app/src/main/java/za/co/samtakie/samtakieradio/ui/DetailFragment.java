@@ -38,6 +38,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -70,6 +72,7 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
     @BindView(R.id.button_play) ImageButton mMediaControlsImage;
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.fabDel) FloatingActionButton fabDel;
+    @BindView(R.id.adView) AdView mAdView;
 
     private MediaBrowserHelper mMediaBrowserHelper;
     private boolean mIsPlaying;
@@ -124,6 +127,10 @@ public class DetailFragment extends Fragment implements IOnFocusListenable{
 
         // Show the Add and the Del Fab button if the Radio Online data exist in the Favorite table
         radioInFavorite(radioID);
+
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
 
         return view;

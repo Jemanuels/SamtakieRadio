@@ -31,6 +31,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import za.co.samtakie.samtakieradio.R;
 import za.co.samtakie.samtakieradio.provider.Contract;
 import za.co.samtakie.samtakieradio.provider.OnlineRadioNewsAdapter;
@@ -55,6 +58,7 @@ public class News extends AppCompatActivity implements LoaderManager.LoaderCallb
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private OnlineRadioNewsAdapter mAdapter;
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +129,9 @@ public class News extends AppCompatActivity implements LoaderManager.LoaderCallb
         // Start the loader
         getSupportLoaderManager().initLoader(LOADER_ID_MESSAGES, null, this);
 
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
 
